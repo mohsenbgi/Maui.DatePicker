@@ -72,7 +72,7 @@
             <Setter Property="StrokeThickness" Value="0"/>
             <Setter Property="HorizontalOptions" Value="Center"/>
             <Setter Property="VerticalOptions" Value="Center"/>
-            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Padding" Value="2.5"/>
             <Style.Triggers>
                 <Trigger TargetType="controls:DayView" Property="IsSelected" Value="True">
                     <Setter Property="BackgroundColor" Value="{StaticResource Gray200}"/>
@@ -87,8 +87,8 @@
             <Setter Property="HorizontalTextAlignment" Value="Center"/>
             <Setter Property="VerticalTextAlignment" Value="Center"/>
             <Setter Property="TextColor" Value="Black"/>
-            <Setter Property="WidthRequest" Value="20"/>
-            <Setter Property="HeightRequest" Value="20"/>
+            <Setter Property="WidthRequest" Value="25"/>
+            <Setter Property="HeightRequest" Value="25"/>
             <Setter Property="FontSize" Value="15"/>
             <Setter Property="FontAttributes" Value="Bold"/>
             <Style.Triggers>
