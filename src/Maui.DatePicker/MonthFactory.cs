@@ -16,16 +16,16 @@ namespace Maui.DatePicker
 
             DateTime firstDateOfMonth = realFirstDateOfMonth.GetFirstDateOfWeek();
 
-            WeekT[] weeks = new WeekT[Constants.DatePicker.NumberOfWeeksInMonth];
-            DayT[] days = new DayT[Constants.DatePicker.NumberOfDaysInMonth];
+            WeekT[] weeks = new WeekT[Constants.Scheduler.NumberOfWeeksInMonth];
+            DayT[] days = new DayT[Constants.Scheduler.NumberOfDaysInMonth];
 
             int dayIndex = 0;
-            for (int weekIndex = 0; weekIndex < Constants.DatePicker.NumberOfWeeksInMonth; weekIndex++)
+            for (int weekIndex = 0; weekIndex < Constants.Scheduler.NumberOfWeeksInMonth; weekIndex++)
             {
                 var currentWeek = new WeekT();
                 weeks[weekIndex] = currentWeek;
 
-                for (int dayOfWeekIndex = 0; dayOfWeekIndex < Constants.DatePicker.NumberOfDaysInWeek; dayOfWeekIndex++)
+                for (int dayOfWeekIndex = 0; dayOfWeekIndex < Constants.Scheduler.NumberOfDaysInWeek; dayOfWeekIndex++)
                 {
                     var currentDateOfMonth = firstDateOfMonth.AddDays(dayIndex);
 

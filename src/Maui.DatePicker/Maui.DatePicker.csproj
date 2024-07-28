@@ -23,4 +23,10 @@
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Compile Update="Scheduler.xaml.cs">
+	    <DependentUpon>Scheduler.xaml</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
 </Project>

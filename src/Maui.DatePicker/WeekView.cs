@@ -36,7 +36,7 @@ public class WeekView : HorizontalStackLayout, IWeekView
 
     public WeekView()
     {
-        _days = new DayView[Constants.DatePicker.NumberOfDaysInWeek];
+        _days = new DayView[Constants.Scheduler.NumberOfDaysInWeek];
     }
 
     #endregion
@@ -62,7 +62,7 @@ public class WeekView : HorizontalStackLayout, IWeekView
 
     public void Replace(IWeekView newView)
     {
-        for (int i = 0; i < Constants.DatePicker.NumberOfDaysInWeek; i++)
+        for (int i = 0; i < Constants.Scheduler.NumberOfDaysInWeek; i++)
         {
             _days[i].Replace(newView.Days[i]);
         }

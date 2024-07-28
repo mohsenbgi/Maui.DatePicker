@@ -5,7 +5,7 @@
              xmlns:dp="clr-namespace:Maui.DatePicker;assembly=Maui.DatePicker">
 
     <VerticalStackLayout BackgroundColor="#F8F8F8" Margin="50,0">
-        <dp:DatePicker />
+        <dp:Scheduler />
 
         </VerticalStackLayout>
 

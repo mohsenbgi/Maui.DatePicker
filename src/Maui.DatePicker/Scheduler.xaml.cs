@@ -9,7 +9,7 @@ using System.Globalization;
 
 namespace Maui.DatePicker;
 
-public partial class DatePicker : StackLayout
+public partial class Scheduler : StackLayout
 {
     #region Fields
 
@@ -51,11 +51,11 @@ public partial class DatePicker : StackLayout
     public static readonly BindableProperty ActiveMonthProperty = BindableProperty.Create(
         nameof(ActiveMonth),
         typeof(IMonthView),
-        typeof(DatePicker),
+        typeof(Scheduler),
         null,
         propertyChanged: (bindable, oldValue, newValue) =>
         {
-            if (bindable is DatePicker schedulerView)
+            if (bindable is Scheduler schedulerView)
             {
                 schedulerView.OnActiveMonthChanged((IMonthView?)oldValue, (IMonthView?)newValue);
             }
@@ -75,7 +75,7 @@ public partial class DatePicker : StackLayout
 
     #region Ctor
 
-    public DatePicker()
+    public Scheduler()
     {
         InitializeComponent();
 
@@ -270,11 +270,11 @@ public partial class DatePicker : StackLayout
         if (ActiveMonth == monthView)
         {
 
-            await monthView.BoundsXTo(_arrangedWidth, Maui.DatePicker.Constants.DatePicker.AnimationsLength);
+            await monthView.BoundsXTo(_arrangedWidth, Maui.DatePicker.Constants.Scheduler.AnimationsLength);
         }
         else
         {
-            await monthView.BoundsXTo(0, Maui.DatePicker.Constants.DatePicker.AnimationsLength);
+            await monthView.BoundsXTo(0, Maui.DatePicker.Constants.Scheduler.AnimationsLength);
         }
     }
 
@@ -282,11 +282,11 @@ public partial class DatePicker : StackLayout
     {
         if (ActiveMonth == monthView)
         {
-            await monthView.BoundsXTo(-_arrangedWidth, Maui.DatePicker.Constants.DatePicker.AnimationsLength);
+            await monthView.BoundsXTo(-_arrangedWidth, Maui.DatePicker.Constants.Scheduler.AnimationsLength);
         }
         else
         {
-            await monthView.BoundsXTo(0, Maui.DatePicker.Constants.DatePicker.AnimationsLength);
+            await monthView.BoundsXTo(0, Maui.DatePicker.Constants.Scheduler.AnimationsLength);
         }
     }
 
@@ -294,17 +294,17 @@ public partial class DatePicker : StackLayout
     {
         if (ActiveMonth == monthView)
         {
-            await monthView.BoundsXTo(0, Maui.DatePicker.Constants.DatePicker.AnimationsLength);
+            await monthView.BoundsXTo(0, Maui.DatePicker.Constants.Scheduler.AnimationsLength);
         }
         else
         {
             if (AbsoluteLayout.GetLayoutBounds(monthView).X < 0)
             {
-                await monthView.BoundsXTo(-_arrangedWidth, Maui.DatePicker.Constants.DatePicker.AnimationsLength);
+                await monthView.BoundsXTo(-_arrangedWidth, Maui.DatePicker.Constants.Scheduler.AnimationsLength);
             }
             else
             {
-                await monthView.BoundsXTo(_arrangedWidth, Maui.DatePicker.Constants.DatePicker.AnimationsLength);
+                await monthView.BoundsXTo(_arrangedWidth, Maui.DatePicker.Constants.Scheduler.AnimationsLength);
             }
         }
 
@@ -364,7 +364,7 @@ public partial class DatePicker : StackLayout
         {
             var currentMonth = ActiveMonth;
 
-            for (int i = 0; i < Maui.DatePicker.Constants.DatePicker.GeneratedInVisibleMonthesCount; i++)
+            for (int i = 0; i < Maui.DatePicker.Constants.Scheduler.GeneratedInVisibleMonthesCount; i++)
             {
                 var nextMonthInList = GetMonthView(currentMonth.ViewId + 1);
                 if (nextMonthInList is not null)
@@ -382,7 +382,7 @@ public partial class DatePicker : StackLayout
 
             currentMonth = ActiveMonth;
 
-            for (int i = 0; i < Maui.DatePicker.Constants.DatePicker.GeneratedInVisibleMonthesCount; i++)
+            for (int i = 0; i < Maui.DatePicker.Constants.Scheduler.GeneratedInVisibleMonthesCount; i++)
             {
                 var prevMonthInList = GetMonthView(currentMonth.ViewId - 1);
                 if (prevMonthInList is not null)

@@ -1,6 +1,6 @@
 ﻿namespace Maui.DatePicker.Constants
 {
-    public static class DatePicker
+    public static class Scheduler
     {
         public const int NumberOfWeeksInMonth = 6;
         public const int NumberOfDaysInWeek = 7;

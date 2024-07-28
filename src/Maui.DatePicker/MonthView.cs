@@ -134,12 +134,12 @@ namespace Maui.DatePicker
 
         public void Replace(IMonthView newView)
         {
-            for (int i = 0; i < Constants.DatePicker.NumberOfWeeksInMonth; i++)
+            for (int i = 0; i < Constants.Scheduler.NumberOfWeeksInMonth; i++)
             {
                 _weeks[i].Replace(newView.Weeks[i]);
             }
 
-            for (int i = 0; i < Constants.DatePicker.NumberOfDaysInMonth; i++)
+            for (int i = 0; i < Constants.Scheduler.NumberOfDaysInMonth; i++)
             {
                 _days[i].Replace(newView.Days[i]);
             }
