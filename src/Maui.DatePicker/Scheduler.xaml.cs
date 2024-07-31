@@ -142,40 +142,22 @@ public partial class Scheduler : Grid
         return _monthViews.ContainsKey(monthView.ViewId);
     }
 
-    public async Task GoToNextMonth(DateTime? selctedDate = null)
+    public async Task GoToRightMonth(DateTime? selctedDate = null)
     {
-        if (Culture.Current.TextInfo.IsRightToLeft)
-        {
-            await Task.WhenAll(
-                    SwipRight(_activeMonth),
-                    SwipRight(_nextMonth));
-        }
-        else
-        {
-            await Task.WhenAll(
-                    SwipLeft(_activeMonth),
-                    SwipLeft(_nextMonth));
-        }
-
+        await Task.WhenAll(
+                SwipLeft(_activeMonth),
+                SwipLeft(_nextMonth));
+     
         ActiveMonth = _nextMonth;
         if (selctedDate is not null) _activeMonth.SelectedDate = selctedDate.Value;
     }
 
-    public async Task GoToPrevMonth(DateTime? selctedDate = null)
-    {
-        if (Culture.Current.TextInfo.IsRightToLeft)
-        {
-            await Task.WhenAll(
-                    SwipLeft(_activeMonth),
-                    SwipLeft(_prevMonth));
-        }
-        else
-        {
-            await Task.WhenAll(
-                    SwipRight(_activeMonth),
-                    SwipRight(_prevMonth));
-        }
-
+    public async Task GoToLeftMonth(DateTime? selctedDate = null)
+    {    
+        await Task.WhenAll(
+                SwipRight(_activeMonth),
+                SwipRight(_prevMonth));
+     
         ActiveMonth = _prevMonth;
         if (selctedDate is not null) ActiveMonth.SelectedDate = selctedDate.Value;
     }

@@ -4,14 +4,8 @@
              x:Class="SampleApp.MainPage"
              xmlns:dp="clr-namespace:Maui.DatePicker;assembly=Maui.DatePicker">
 
-    <AbsoluteLayout>
-        <Button Text="DatePicker" x:Name="DatePicker" />
-        <dp:Popup x:Name="popup" CloseByTappingOutside="True">
-            <VerticalStackLayout >
-                <dp:Scheduler />
-                <Button HorizontalOptions="Fill" Text="btn"/>
-            </VerticalStackLayout>
-        </dp:Popup>
-    </AbsoluteLayout>
+    <Grid>
+        <dp:DatePickerDialog />
+    </Grid>
 
 </ContentPage>

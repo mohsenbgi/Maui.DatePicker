@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFrameworks>net8.0-android;net8.0-ios;net8.0-maccatalyst</TargetFrameworks>
@@ -17,6 +17,23 @@
 		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
 	</PropertyGroup>
+	
+	<ItemGroup>
+		<EmbeddedResource Include="Fonts\MaterialIconsOutlined-Regular.otf" >
+		</EmbeddedResource>
+		<EmbeddedResource Include="Icons\leftArrow_light.png">
+			<LogicalName>leftArrow_light.png</LogicalName>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Icons\leftArrow_dark.png">
+			<LogicalName>leftArrow_dark.png</LogicalName>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Icons\rightArrow_light.png">
+			<LogicalName>rightArrow_light.png</LogicalName>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Icons\rightArrow_dark.png">
+			<LogicalName>rightArrow_dark.png</LogicalName>
+		</EmbeddedResource>
+	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
@@ -27,6 +44,12 @@
 	  <Compile Update="Scheduler.xaml.cs">
 	    <DependentUpon>Scheduler.xaml</DependentUpon>
 	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiXaml Update="DatePickerDialog.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	</ItemGroup>
 
 </Project>

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Maui.DatePicker;
+using Microsoft.Extensions.Logging;
 
 namespace SampleApp
 {
@@ -13,7 +14,8 @@ namespace SampleApp
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-                });
+                })
+                .UseMauiDatePicker();
 
 #if DEBUG
     		builder.Logging.AddDebug();

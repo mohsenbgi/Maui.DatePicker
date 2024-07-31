@@ -68,12 +68,12 @@ public partial class Popup : ContentView
         {
             StrokeThickness = 0,
             BackgroundColor = Colors.White,
-            Padding = new Thickness(10, 25),
+            Padding = new Thickness(10, 15),
             VerticalOptions = LayoutOptions.Center,
             HorizontalOptions = LayoutOptions.Center,
             StrokeShape = new RoundRectangle
             {
-                CornerRadius = new CornerRadius(15, 15, 15, 15)
+                CornerRadius = new CornerRadius(10, 10, 10, 10)
             }
         };
         base.Content = _contentPresenter;
