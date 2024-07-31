@@ -195,12 +195,16 @@ public partial class Scheduler : Grid
                 totalX = eventArgs.TotalX + _appliedTotalXDiff;
             else totalX = eventArgs.TotalX;
 
+            var maximumX = Width;
+            var minimumX = -maximumX;
+            totalX = Math.Clamp(totalX, minimumX, maximumX);
+
             var toApplyXDiff = totalX - _appliedTotalXDiff;
 
-            ChangeX(_activeMonth, toApplyXDiff);
+            _activeMonth.TranslationX += toApplyXDiff;
 
-            if (_appliedTotalXDiff > 0) ChangeX(_leftMonth, toApplyXDiff);
-            else ChangeX(_rightMonth, toApplyXDiff);
+            if (_appliedTotalXDiff > 0) _leftMonth.TranslationX += toApplyXDiff;
+            else _rightMonth.TranslationX += toApplyXDiff;
 
             _appliedTotalXDiff += toApplyXDiff;
         }
@@ -248,19 +252,6 @@ public partial class Scheduler : Grid
                 _isHorizontalPan = false;
                 break;
         }
-    }
-
-    private void ChangeX(MonthView? monthView, double toApplyXDiff)
-    {
-        if (monthView is null) return;
-
-        var toApplyX = monthView.TranslationX + toApplyXDiff;
-        var maximumX = Width;
-        var minimumX = -maximumX;
-
-        toApplyX = Math.Clamp(toApplyX, minimumX, maximumX);
-
-        monthView.TranslationX = toApplyX;
     }
 
     public async Task SwipRight(MonthView monthView)
