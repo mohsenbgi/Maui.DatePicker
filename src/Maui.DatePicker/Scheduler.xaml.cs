@@ -9,24 +9,23 @@ using System.Globalization;
 
 namespace Maui.DatePicker;
 
-public partial class Scheduler : StackLayout
+public partial class Scheduler : Grid
 {
     #region Fields
 
-    private bool _isRenderingMonthes;
-    private Task _renderingMonthesTask;
-    private double _arrangedWidth;
-    private readonly PanGestureRecognizer _panGestureRecognizer;
-    private readonly Dictionary<int, IMonthView> _monthViews;
-    private bool _isHorizontalPan;
-    private bool _isVerticalPan;
-    private double _appliedTotalXDiff;
-    private readonly IMonthView _todayMonthView;
-    private MonthView _prevMonth;
-    private MonthView _nextMonth;
-    private MonthView _activeMonth;
-    private MonthView _leftMonth => Culture.Current.TextInfo.IsRightToLeft ? _nextMonth : _prevMonth;
-    private MonthView _rightMonth => Culture.Current.TextInfo.IsRightToLeft ? _prevMonth : _nextMonth;
+    bool _isRenderingMonthes;
+    Task _renderingMonthesTask;
+    readonly PanGestureRecognizer _panGestureRecognizer;
+    readonly Dictionary<int, IMonthView> _monthViews;
+    bool _isHorizontalPan;
+    bool _isVerticalPan;
+    double _appliedTotalXDiff;
+    readonly IMonthView _todayMonthView;
+    MonthView _prevMonth;
+    MonthView _nextMonth;
+    MonthView _activeMonth;
+    MonthView _leftMonth => Culture.Current.TextInfo.IsRightToLeft ? _nextMonth : _prevMonth;
+    MonthView _rightMonth => Culture.Current.TextInfo.IsRightToLeft ? _prevMonth : _nextMonth;
 
     #endregion
 
@@ -220,8 +219,8 @@ public partial class Scheduler : StackLayout
 
             await Task.WhenAll(tasks);
 
-            if (AbsoluteLayout.GetLayoutBounds(_leftMonth).X == 0) ActiveMonth = _leftMonth;
-            else if (AbsoluteLayout.GetLayoutBounds(_rightMonth).X == 0) ActiveMonth = _rightMonth;
+            if (_leftMonth.TranslationX == 0) ActiveMonth = _leftMonth;
+            else if (_rightMonth.TranslationX == 0) ActiveMonth = _rightMonth;
 
             _appliedTotalXDiff = 0;
         }
@@ -255,14 +254,13 @@ public partial class Scheduler : StackLayout
     {
         if (monthView is null) return;
 
-        var lastBounds = AbsoluteLayout.GetLayoutBounds(monthView);
-        var toApplyX = lastBounds.X + toApplyXDiff;
-        var maximumX = _arrangedWidth;
+        var toApplyX = monthView.TranslationX + toApplyXDiff;
+        var maximumX = Width;
         var minimumX = -maximumX;
 
         toApplyX = Math.Clamp(toApplyX, minimumX, maximumX);
 
-        AbsoluteLayout.SetLayoutBounds(monthView, new Rect(toApplyX, lastBounds.Y, lastBounds.Width, lastBounds.Height));
+        monthView.TranslationX = toApplyX;
     }
 
     public async Task SwipRight(MonthView monthView)
@@ -270,11 +268,11 @@ public partial class Scheduler : StackLayout
         if (ActiveMonth == monthView)
         {
 
-            await monthView.BoundsXTo(_arrangedWidth, Maui.DatePicker.Constants.Scheduler.AnimationsLength);
+            await monthView.TranslateTo(Width, 0, Maui.DatePicker.Constants.Scheduler.AnimationsLength);
         }
         else
         {
-            await monthView.BoundsXTo(0, Maui.DatePicker.Constants.Scheduler.AnimationsLength);
+            await monthView.TranslateTo(0, 0, Maui.DatePicker.Constants.Scheduler.AnimationsLength);
         }
     }
 
@@ -282,11 +280,11 @@ public partial class Scheduler : StackLayout
     {
         if (ActiveMonth == monthView)
         {
-            await monthView.BoundsXTo(-_arrangedWidth, Maui.DatePicker.Constants.Scheduler.AnimationsLength);
+            await monthView.TranslateTo(-Width, 0, Maui.DatePicker.Constants.Scheduler.AnimationsLength);
         }
         else
         {
-            await monthView.BoundsXTo(0, Maui.DatePicker.Constants.Scheduler.AnimationsLength);
+            await monthView.TranslateTo(0, 0, Maui.DatePicker.Constants.Scheduler.AnimationsLength);
         }
     }
 
@@ -294,17 +292,17 @@ public partial class Scheduler : StackLayout
     {
         if (ActiveMonth == monthView)
         {
-            await monthView.BoundsXTo(0, Maui.DatePicker.Constants.Scheduler.AnimationsLength);
+            await monthView.TranslateTo(0, 0, Maui.DatePicker.Constants.Scheduler.AnimationsLength);
         }
         else
         {
-            if (AbsoluteLayout.GetLayoutBounds(monthView).X < 0)
+            if (monthView.TranslationX < 0)
             {
-                await monthView.BoundsXTo(-_arrangedWidth, Maui.DatePicker.Constants.Scheduler.AnimationsLength);
+                await monthView.TranslateTo(-Width, 0, Maui.DatePicker.Constants.Scheduler.AnimationsLength);
             }
             else
             {
-                await monthView.BoundsXTo(_arrangedWidth, Maui.DatePicker.Constants.Scheduler.AnimationsLength);
+                await monthView.TranslateTo(Width, 0, Maui.DatePicker.Constants.Scheduler.AnimationsLength);
             }
         }
 
@@ -346,7 +344,7 @@ public partial class Scheduler : StackLayout
     protected override Size ArrangeOverride(Rect bounds)
     {
         var arrangedSize = base.ArrangeOverride(bounds);
-        _arrangedWidth = arrangedSize.Width;
+
         RenderMontheViews();
         return arrangedSize;
     }
@@ -426,15 +424,12 @@ public partial class Scheduler : StackLayout
         {
             if (activatedMonth is MonthView activatedMonthView)
             {
-                var prevBounds = AbsoluteLayout.GetLayoutBounds(activatedMonthView);
-                AbsoluteLayout.SetLayoutBounds(activatedMonthView, new Rect(0, prevBounds.Y, prevBounds.Width, prevBounds.Height));
-
+                activatedMonthView.TranslationX = 0;
                 _activeMonth = activatedMonthView;
             }
             else
             {
-                var prevBounds = AbsoluteLayout.GetLayoutBounds(_activeMonth);
-                AbsoluteLayout.SetLayoutBounds(_activeMonth, new Rect(0, prevBounds.Y, prevBounds.Width, prevBounds.Height));
+                _activeMonth.TranslationX = 0;
                 _activeMonth.Replace(activatedMonth);
 
             }
@@ -455,19 +450,18 @@ public partial class Scheduler : StackLayout
 
     private async ValueTask ReplaceMonthViewByNewViewId(MonthView monthView, int viewId)
     {
-        var prevBounds = AbsoluteLayout.GetLayoutBounds(monthView);
         var toApplyX = 0d;
 
         if (Culture.Current.TextInfo.IsRightToLeft)
         {
-            toApplyX = _activeMonth.ViewId < viewId ? -_arrangedWidth : _arrangedWidth;
+            toApplyX = _activeMonth.ViewId < viewId ? -Width : Width;
         }
         else
         {
-            toApplyX = _activeMonth.ViewId > viewId ? -_arrangedWidth : _arrangedWidth;
+            toApplyX = _activeMonth.ViewId > viewId ? -Width : Width;
         }
 
-        AbsoluteLayout.SetLayoutBounds(monthView, new Rect(toApplyX, prevBounds.Y, prevBounds.Width, prevBounds.Height));
+        monthView.TranslationX = toApplyX;
 
         if (monthView.ViewId == viewId) return;
 

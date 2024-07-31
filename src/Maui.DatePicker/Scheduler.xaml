@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<StackLayout xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+<Grid xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Maui.DatePicker.Scheduler"
-             xmlns:controls="clr-namespace:Maui.DatePicker">
-    <StackLayout.Resources>
+             xmlns:controls="clr-namespace:Maui.DatePicker"
+             RowDefinitions="Auto,Auto"
+             ColumnDefinitions="Auto"
+             HorizontalOptions="Center">
+    <Grid.Resources>
         <FlowDirection x:Key="GlobalFlowDirection">LeftToRight</FlowDirection>
         <x:Double x:Key="WeeksHeight">40</x:Double>
         <x:Double x:Key="MonthHeight">240</x:Double>
-        <Color x:Key="SchedulerGenericLightBackgroundColor">#F8F8F8</Color>
+        <Color x:Key="SchedulerGenericLightBackgroundColor">Transparent</Color>
 
         <Style TargetType="DatePicker" >
             <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource SchedulerGenericLightBackgroundColor}}"/>
@@ -28,7 +31,7 @@
             <Setter Property="HorizontalOptions" Value="Fill"/>
             <Setter Property="HeightRequest" Value="{StaticResource MonthHeight}"/>
             <Setter Property="IsClippedToBounds" Value="True"/>
-            
+
             <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource SchedulerGenericLightBackgroundColor}}"/>
         </Style>
 
@@ -97,9 +100,9 @@
                 </DataTrigger>
             </Style.Triggers>
         </Style>
-    </StackLayout.Resources>
-    <HorizontalStackLayout Style="{StaticResource WeekDays}" x:Name="weekDays">
+    </Grid.Resources>
+    <HorizontalStackLayout Grid.Row="0" Grid.Column="0" Style="{StaticResource WeekDays}" x:Name="weekDays">
     </HorizontalStackLayout>
-    <AbsoluteLayout x:Name="monthContainerBox" Style="{StaticResource MonthContainer}">
+    <AbsoluteLayout Grid.Row="1" Grid.Column="0" x:Name="monthContainerBox" Style="{StaticResource MonthContainer}">
     </AbsoluteLayout>
-</StackLayout>
+</Grid>

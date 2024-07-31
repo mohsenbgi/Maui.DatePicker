@@ -11,6 +11,11 @@ namespace SampleApp
         {
             App.Current.UserAppTheme = AppTheme.Light;
             InitializeComponent();
+
+            DatePicker.Clicked += (s, e) =>
+            {
+                popup.Open();
+            };
         }
 
     }
