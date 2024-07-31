@@ -57,8 +57,8 @@ public partial class Popup : ContentView
         HorizontalOptions = LayoutOptions.Fill;
         VerticalOptions = LayoutOptions.Fill;
         Opacity = 0;
-        ZIndex = 4;
-        IsVisible = false;
+        ZIndex = 2;
+        InputTransparent = true;
         IsClippedToBounds = true;
         BackgroundColor = BackdropColor.WithAlpha(BackdropOpacity);
         AbsoluteLayout.SetLayoutBounds(this, new Rect(0, 0, 1, 1));
@@ -148,6 +148,7 @@ public partial class Popup : ContentView
     public void Open()
     {
         IsVisible = true;
+        InputTransparent = false;
         this.OpacityTo(0, 1, 250, Easing.SinIn);
     }
 
@@ -155,5 +156,6 @@ public partial class Popup : ContentView
     {
         await this.OpacityTo(1, 0, 250, Easing.SinInOut);
         IsVisible = false;
+        InputTransparent = true;
     }
 }
