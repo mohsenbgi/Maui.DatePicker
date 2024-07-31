@@ -21,18 +21,6 @@
 	<ItemGroup>
 		<EmbeddedResource Include="Fonts\MaterialIconsOutlined-Regular.otf" >
 		</EmbeddedResource>
-		<EmbeddedResource Include="Icons\leftArrow_light.png">
-			<LogicalName>leftArrow_light.png</LogicalName>
-		</EmbeddedResource>
-		<EmbeddedResource Include="Icons\leftArrow_dark.png">
-			<LogicalName>leftArrow_dark.png</LogicalName>
-		</EmbeddedResource>
-		<EmbeddedResource Include="Icons\rightArrow_light.png">
-			<LogicalName>rightArrow_light.png</LogicalName>
-		</EmbeddedResource>
-		<EmbeddedResource Include="Icons\rightArrow_dark.png">
-			<LogicalName>rightArrow_dark.png</LogicalName>
-		</EmbeddedResource>
 	</ItemGroup>
 
 	<ItemGroup>
