@@ -3,7 +3,7 @@ using Maui.DatePicker.Extensions;
 using Maui.DatePicker.Interfaces;
 using System.Globalization;
 
-namespace Maui.DatePicker
+namespace Maui.DatePicker.Scheduler
 {
     public static class MonthFactory
     {

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Grid xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Maui.DatePicker.Scheduler"
-             xmlns:controls="clr-namespace:Maui.DatePicker"
+             x:Class="Maui.DatePicker.Scheduler.Scheduler"
+             xmlns:controls="clr-namespace:Maui.DatePicker.Scheduler"
              RowDefinitions="Auto,Auto"
              ColumnDefinitions="Auto"
              HorizontalOptions="Center">

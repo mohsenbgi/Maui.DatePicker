@@ -1,7 +1,7 @@
 ﻿using Maui.DatePicker.Interfaces;
 using Maui.DatePicker.Constants;
 
-namespace Maui.DatePicker
+namespace Maui.DatePicker.Scheduler
 {
     public class WeekData : IWeekView
     {

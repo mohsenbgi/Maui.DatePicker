@@ -1,20 +1,20 @@
-using Maui.DatePicker;
 using Maui.DatePicker.Animations;
 using Maui.DatePicker.Constants;
 using Maui.DatePicker.EventArgs;
 using Maui.DatePicker.Extensions;
 using Maui.DatePicker.Helpers;
 using Maui.DatePicker.Interfaces;
+using System;
 using System.Globalization;
 
-namespace Maui.DatePicker;
+namespace Maui.DatePicker.Scheduler;
 
 public partial class Scheduler : Grid
 {
     #region Fields
 
-    bool _isRenderingMonthes;
-    Task _renderingMonthesTask;
+    bool _isRenderingMonths;
+    Task _renderingMonthsTask;
     readonly PanGestureRecognizer _panGestureRecognizer;
     readonly Dictionary<int, IMonthView> _monthViews;
     bool _isHorizontalPan;
@@ -142,29 +142,52 @@ public partial class Scheduler : Grid
         return _monthViews.ContainsKey(monthView.ViewId);
     }
 
-    public async Task GoToRightMonth(DateTime? selctedDate = null)
+    public async Task GoToRightMonth(DateTime? selectedDate = null)
     {
         await Task.WhenAll(
-                SwipLeft(_activeMonth),
-                SwipLeft(_nextMonth));
+                SwipeLeft(_activeMonth),
+                SwipeLeft(_nextMonth));
      
         ActiveMonth = _nextMonth;
-        if (selctedDate is not null) _activeMonth.SelectedDate = selctedDate.Value;
+        if (selectedDate is not null) _activeMonth.SelectedDate = selectedDate.Value;
     }
 
-    public async Task GoToLeftMonth(DateTime? selctedDate = null)
+    public async Task GoToLeftMonth(DateTime? selectedDate = null)
     {    
         await Task.WhenAll(
-                SwipRight(_activeMonth),
-                SwipRight(_prevMonth));
+                SwipeRight(_activeMonth),
+                SwipeRight(_prevMonth));
      
         ActiveMonth = _prevMonth;
-        if (selctedDate is not null) ActiveMonth.SelectedDate = selctedDate.Value;
+        if (selectedDate is not null) ActiveMonth.SelectedDate = selectedDate.Value;
     }
 
     public void GoToday()
     {
         ActiveMonth = _todayMonthView;
+    }
+
+    public void GoToDate(DateTime date)
+    {
+        var differentTime = (date - ActiveMonth.SelectedDate);
+
+        DateTime startDate = DateTime.MinValue;
+        DateTime endDate = startDate.Add(differentTime.Duration());
+
+        int totalMonths = ((endDate.Year - startDate.Year) * 12) + endDate.Month - startDate.Month;
+
+        if (differentTime.Ticks < 0) totalMonths = -totalMonths;
+
+        var expectedViewId = ActiveMonth.ViewId + totalMonths;
+        var expectedMonthData = GetMonthView(expectedViewId);
+        if(expectedMonthData is null)
+        {
+            expectedMonthData = MonthFactory.CreateMonthData(expectedViewId, date);
+            _monthViews[expectedMonthData.ViewId] = expectedMonthData;
+        }
+
+        ActiveMonth = expectedMonthData;
+        ActiveMonth = _activeMonth;
     }
 
     protected virtual void OnPanRunning(object? sender, PanUpdatedEventArgs eventArgs)
@@ -236,7 +259,7 @@ public partial class Scheduler : Grid
         }
     }
 
-    public async Task SwipRight(MonthView monthView)
+    public async Task SwipeRight(MonthView monthView)
     {
         if (ActiveMonth == monthView)
         {
@@ -249,7 +272,7 @@ public partial class Scheduler : Grid
         }
     }
 
-    public async Task SwipLeft(MonthView monthView)
+    public async Task SwipeLeft(MonthView monthView)
     {
         if (ActiveMonth == monthView)
         {
@@ -261,7 +284,7 @@ public partial class Scheduler : Grid
         }
     }
 
-    private async Task PreventSwipping(MonthView monthView)
+    private async Task PreventSwiping(MonthView monthView)
     {
         if (ActiveMonth == monthView)
         {
@@ -289,20 +312,20 @@ public partial class Scheduler : Grid
         {
             if (_appliedTotalXDiff > 0)
             {
-                await SwipRight(monthView);
+                await SwipeRight(monthView);
             }
             else
             {
-                await SwipLeft(monthView);
+                await SwipeLeft(monthView);
             }
         }
         else
         {
-            await PreventSwipping(monthView);
+            await PreventSwiping(monthView);
         }
     }
 
-    private void RenderMontheViews()
+    private void RenderMonthViews()
     {
         if (!monthContainerBox.Children.Any())
         {
@@ -318,18 +341,18 @@ public partial class Scheduler : Grid
     {
         var arrangedSize = base.ArrangeOverride(bounds);
 
-        RenderMontheViews();
+        RenderMonthViews();
         return arrangedSize;
     }
 
-    private Task RenderPrevAndNextMonthes()
+    private Task RenderPrevAndNextMonths()
     {
-        if (_isRenderingMonthes) return _renderingMonthesTask;
+        if (_isRenderingMonths) return _renderingMonthsTask;
 
-        _isRenderingMonthes = true;
+        _isRenderingMonths = true;
 
-        _renderingMonthesTask = Task.Run(render).ContinueWith((task) => { _isRenderingMonthes = false; });
-        return _renderingMonthesTask;
+        _renderingMonthsTask = Task.Run(render).ContinueWith((task) => { _isRenderingMonths = false; });
+        return _renderingMonthsTask;
 
         void render()
         {
@@ -373,7 +396,7 @@ public partial class Scheduler : Grid
 
     protected virtual async void OnActiveMonthChanged(IMonthView? deactivatedMonth, IMonthView? activatedMonth)
     {
-        if (deactivatedMonth is MonthView deactivatedMonthView)
+        if (deactivatedMonth is MonthView deactivatedMonthView && activatedMonth is not MonthData)
         {
             var deactivatedMonthData = GetMonthView(deactivatedMonthView.ViewId);
             if (deactivatedMonthData is not null)
@@ -404,7 +427,7 @@ public partial class Scheduler : Grid
             {
                 _activeMonth.TranslationX = 0;
                 _activeMonth.Replace(activatedMonth);
-
+                
             }
 
             await ReplaceMonthViewByNewViewId(_prevMonth, activatedMonth.ViewId - 1);
@@ -415,7 +438,7 @@ public partial class Scheduler : Grid
                 _monthViews[activatedMonth.ViewId] = activatedMonth;
             }
 
-            RenderPrevAndNextMonthes();
+            RenderPrevAndNextMonths();
         }
 
         ActiveMonthChanged?.Invoke(this, new MonthChangedEventArgs(deactivatedMonth, activatedMonth));
@@ -441,7 +464,7 @@ public partial class Scheduler : Grid
         var monthData = GetMonthView(viewId);
         if (monthData is null)
         {
-            await RenderPrevAndNextMonthes();
+            await RenderPrevAndNextMonths();
             monthData = GetMonthView(viewId);
         }
 

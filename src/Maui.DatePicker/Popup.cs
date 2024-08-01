@@ -51,7 +51,7 @@ public partial class Popup : ContentView
     double _appliedTotalTranslationYDiff;
     bool _isHorizontalPan;
     bool _isVerticalPan;
-    bool _contentPresenterSizeIsSet;
+    Stack<View> _contentViews = new Stack<View>();
     public Popup()
     {
         HorizontalOptions = LayoutOptions.Fill;
@@ -110,8 +110,31 @@ public partial class Popup : ContentView
     {
         if (newView is null) return;
 
-        _contentPresenterSizeIsSet = false;
         _contentPresenter.Content = newView;
+        _contentViews.Clear();
+        _contentViews.Push(newView);
+    }
+
+    public void NavigateTo(View view)
+    {
+        var currentView = _contentViews.Peek();
+
+        view.MaximumHeightRequest = currentView.DesiredSize.Height;
+        view.MaximumWidthRequest = currentView.DesiredSize.Width;
+        if(view is ScrollView scrollView)
+        {
+            view.MaximumHeightRequest = scrollView.Content.DesiredSize.Height;
+            view.MaximumWidthRequest = scrollView.Content.DesiredSize.Width;
+        }
+
+        _contentViews.Push(view);
+        _contentPresenter.Content = view;
+    }
+
+    public void NavigateBack()
+    {
+        _contentViews.Pop();
+        _contentPresenter.Content = _contentViews.Peek();
     }
 
     private void OnBackdropColorChanged(Color oldColor, Color newColor)
