@@ -7,8 +7,11 @@
         <Button Text="DatePicker" x:Name="DatePicker" />
         <local:Popup x:Name="popup" CloseByTappingOutside="True">
             <VerticalStackLayout >
-                <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,10" Padding="5,0">
-                    <Label x:Name="currentMonth" Grid.Column="0" FontSize="25" FontAttributes="Bold" VerticalTextAlignment="Center"/>
+                <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,10" Padding="5,0" FlowDirection="LeftToRight">
+                    <HorizontalStackLayout Grid.Column="0" Spacing="5">
+                        <Label x:Name="currentMonth" FontSize="25" FontAttributes="Bold" VerticalTextAlignment="Center"/>
+                        <Label x:Name="currentYear" FontSize="25" FontAttributes="Bold" VerticalTextAlignment="Center"/>
+                    </HorizontalStackLayout>
                     <HorizontalStackLayout Spacing="10" Grid.Column="1" VerticalOptions="Center">
                         <ImageButton Source="{FontImageSource FontFamily=MaterialIconsOutlined, Glyph=chevron_left, Color=Black}"  MinimumWidthRequest="25" MinimumHeightRequest="25" WidthRequest="25" HeightRequest="25" x:Name="leftMonth"/>
                         <ImageButton Source="{FontImageSource FontFamily=MaterialIconsOutlined, Glyph=chevron_right, Color=Black}" MinimumWidthRequest="25" MinimumHeightRequest="25" WidthRequest="25" HeightRequest="25"  x:Name="rightMonth"/>
