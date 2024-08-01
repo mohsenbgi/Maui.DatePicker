@@ -9,9 +9,9 @@
             <VerticalStackLayout >
                 <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,10" Padding="5,0">
                     <Label x:Name="currentMonth" Grid.Column="0" FontSize="25" FontAttributes="Bold" VerticalTextAlignment="Center"/>
-                    <HorizontalStackLayout Spacing="{OnPlatform 15, WinUI=5}" Grid.Column="1" VerticalOptions="Center">
-                        <ImageButton Source="{FontImageSource FontFamily=MaterialIconsOutlined, Glyph=chevron_left, Size=25, Color=Black}"  WidthRequest="25" x:Name="leftMonth"/>
-                        <ImageButton Source="{FontImageSource FontFamily=MaterialIconsOutlined, Glyph=chevron_right, Size=25, Color=Black}" WidthRequest="25"  x:Name="rightMonth"/>
+                    <HorizontalStackLayout Spacing="10" Grid.Column="1" VerticalOptions="Center">
+                        <ImageButton Source="{FontImageSource FontFamily=MaterialIconsOutlined, Glyph=chevron_left, Color=Black}"  MinimumWidthRequest="25" MinimumHeightRequest="25" WidthRequest="25" HeightRequest="25" x:Name="leftMonth"/>
+                        <ImageButton Source="{FontImageSource FontFamily=MaterialIconsOutlined, Glyph=chevron_right, Color=Black}" MinimumWidthRequest="25" MinimumHeightRequest="25" WidthRequest="25" HeightRequest="25"  x:Name="rightMonth"/>
                     </HorizontalStackLayout>
                 </Grid>
                 <local:Scheduler x:Name="scheduler" />
