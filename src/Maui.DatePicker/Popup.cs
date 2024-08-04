@@ -1,5 +1,6 @@
 using Maui.DatePicker.Animations;
 using Maui.DatePicker.Extensions;
+using Microsoft.Maui.Controls;
 using Microsoft.Maui.Controls.Shapes;
 using Microsoft.Maui.Layouts;
 using System.ComponentModel;
@@ -12,6 +13,12 @@ public partial class Popup : ContentView
     public static new readonly BindableProperty ContentProperty = BindableProperty.Create(nameof(Content), typeof(View), typeof(Popup),
         propertyChanged: (bindable, oldValue, newValue) => ((Popup)bindable).OnContentChanged((View)oldValue, (View)newValue));
 
+    public static readonly BindableProperty HeaderProperty = BindableProperty.Create(nameof(Header), typeof(View), typeof(Popup),
+        propertyChanged: (bindable, oldValue, newValue) => ((Popup)bindable).OnHeaderChanged((View)oldValue, (View)newValue));
+
+    public static readonly BindableProperty FooterProperty = BindableProperty.Create(nameof(Footer), typeof(View), typeof(Popup),
+        propertyChanged: (bindable, oldValue, newValue) => ((Popup)bindable).OnFooterChanged((View)oldValue, (View)newValue));
+
     public static readonly BindableProperty BackdropOpacityProperty = BindableProperty.Create(nameof(BackdropOpacity), typeof(float), typeof(Popup), .5f,
         propertyChanged: (bindable, oldValue, newValue) => ((Popup)bindable).OnBackdropOpacityChanged((float)oldValue, (float)newValue));
 
@@ -19,6 +26,18 @@ public partial class Popup : ContentView
         propertyChanged: (bindable, oldValue, newValue) => ((Popup)bindable).OnBackdropColorChanged((Color)oldValue, (Color)newValue));
 
     public static readonly BindableProperty CloseByTappingOutsideProperty = BindableProperty.Create(nameof(OnTapped), typeof(bool), typeof(Popup), false);
+
+    public View Header 
+    {
+        get => (View)GetValue(HeaderProperty);
+        set => SetValue(HeaderProperty, value);
+    }
+
+    public View Footer
+    {
+        get => (View)GetValue(FooterProperty);
+        set => SetValue(FooterProperty, value);
+    }
 
     public new View Content
     {
@@ -44,7 +63,12 @@ public partial class Popup : ContentView
         set => SetValue(CloseByTappingOutsideProperty, value);
     }
 
+    public View CurrentContent => _contentViews.Peek();
+
     readonly Border _contentPresenter;
+    View _content;
+    View _header;
+    View _footer;
     bool _backdropColorIsChanging;
     bool _backgroundColorIsChanging;
     double _minimumTranslationY = 0;
@@ -64,18 +88,7 @@ public partial class Popup : ContentView
         AbsoluteLayout.SetLayoutBounds(this, new Rect(0, 0, 1, 1));
         AbsoluteLayout.SetLayoutFlags(this, AbsoluteLayoutFlags.SizeProportional);
 
-        _contentPresenter = new Border
-        {
-            StrokeThickness = 0,
-            BackgroundColor = Colors.White,
-            Padding = new Thickness(10, 15),
-            VerticalOptions = LayoutOptions.Center,
-            HorizontalOptions = LayoutOptions.Center,
-            StrokeShape = new RoundRectangle
-            {
-                CornerRadius = new CornerRadius(10, 10, 10, 10)
-            }
-        };
+        _contentPresenter = new PopupContentPresenter();
         base.Content = _contentPresenter;
 
         PropertyChanged += OnPropertyChanged;
@@ -110,12 +123,45 @@ public partial class Popup : ContentView
     {
         if (newView is null) return;
 
-        _contentPresenter.Content = newView;
+        var contentGrid = (Grid)_contentPresenter.Content;
+        contentGrid.Remove(_content);
+        
+        _content = newView;
+        
+        Grid.SetRow(_content, 1);
+        contentGrid.Add(_content);
+        
         _contentViews.Clear();
-        _contentViews.Push(newView);
+        _contentViews.Push(_content);
     }
 
-    public void NavigateTo(View view)
+    private void OnHeaderChanged(View oldView, View newView)
+    {
+        if (newView is null) return;
+
+        var contentGrid = (Grid)_contentPresenter.Content;
+        contentGrid.Remove(_header);
+
+        _header = newView;
+        
+        Grid.SetRow(_header, 0);
+        contentGrid.Add(_header);
+    }
+
+    private void OnFooterChanged(View oldView, View newView)
+    {
+        if (newView is null) return;
+
+        var contentGrid = (Grid)_contentPresenter.Content;
+        contentGrid.Remove(_footer);
+
+        _footer = newView;
+
+        Grid.SetRow(_footer, 2);
+        contentGrid.Add(_footer);
+    }
+
+    public async Task NavigateTo(View view)
     {
         var currentView = _contentViews.Peek();
 
@@ -128,13 +174,35 @@ public partial class Popup : ContentView
         }
 
         _contentViews.Push(view);
-        _contentPresenter.Content = view;
+
+        var contentGrid = (Grid)_contentPresenter.Content;
+
+        view.Opacity = 0;
+        Grid.SetRow(view, 1);
+        contentGrid.Add(view);
+
+        await Task.WhenAll(
+                view.OpacityTo(0, 1),
+                currentView.OpacityTo(1, 0));
+
+        contentGrid.Remove(currentView);
+
     }
 
-    public void NavigateBack()
+    public async Task NavigateBack()
     {
-        _contentViews.Pop();
-        _contentPresenter.Content = _contentViews.Peek();
+        var poppedView = _contentViews.Pop();
+        var toShowView = _contentViews.Peek();
+
+        var contentGrid = (Grid)_contentPresenter.Content;
+
+        contentGrid.Add(toShowView);
+
+        await Task.WhenAll(
+                toShowView.OpacityTo(0, 1),
+                poppedView.OpacityTo(1, 0));
+
+        contentGrid.Remove(poppedView);
     }
 
     private void OnBackdropColorChanged(Color oldColor, Color newColor)
@@ -180,5 +248,39 @@ public partial class Popup : ContentView
         await this.OpacityTo(1, 0, 250, Easing.SinInOut);
         IsVisible = false;
         InputTransparent = true;
+    }
+}
+
+public class PopupContentPresenter : Border 
+{
+    SizeRequest? _size;
+    public PopupContentPresenter()
+    {
+        StrokeThickness = 0;
+        BackgroundColor = Colors.White;
+        Padding = new Thickness(10, 15);
+        VerticalOptions = LayoutOptions.Center;
+        HorizontalOptions = LayoutOptions.Center;
+        StrokeShape = new RoundRectangle
+        {
+            CornerRadius = new CornerRadius(10, 10, 10, 10)
+        };
+        Content = new Grid
+        {
+            RowDefinitions = new RowDefinitionCollection(
+                                    new RowDefinition(GridLength.Auto),
+                                    new RowDefinition(GridLength.Star),
+                                    new RowDefinition(GridLength.Auto)),
+        };
+    }
+
+    protected override Size MeasureOverride(double widthConstraint, double heightConstraint)
+    {
+        var sizeRequest = base.MeasureOverride(widthConstraint, heightConstraint);
+
+        if (_size is not null) return _size.Value;
+
+        _size = sizeRequest;
+        return sizeRequest;
     }
 }

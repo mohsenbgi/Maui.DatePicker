@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<CollectionView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Maui.DatePicker.Dialogs.SelectYearDialog"
+             xmlns:behavior="clr-namespace:Maui.DatePicker.Behaviors"
+             x:Name="Self"
+             BindingContext="{x:Reference Self}"
+             ItemsSource="{Binding YearsDataItems}">
+    <CollectionView.ItemTemplate>
+        <DataTemplate>
+            <Border StrokeThickness="0"
+                    HeightRequest="50"
+                    BackgroundColor="White">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="100" />
+                </Border.StrokeShape>
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnYearTapped" />
+                </Border.GestureRecognizers>
+                <Border.Behaviors>
+                    <behavior:HoverBehavior />
+                </Border.Behaviors>
+                <Label HorizontalOptions="Center" VerticalOptions="Center" FontSize="17" Text="{Binding}">
+
+                </Label>
+            </Border>
+        </DataTemplate>
+    </CollectionView.ItemTemplate>
+    <CollectionView.ItemsLayout>
+        <GridItemsLayout Orientation="Vertical" Span="4" VerticalItemSpacing="20" HorizontalItemSpacing="5" />
+    </CollectionView.ItemsLayout>
+</CollectionView>

@@ -1,14 +1,4 @@
 ﻿using Maui.DatePicker.Interfaces;
-
-/* Unmerged change from project 'Maui.DatePicker (net8.0-android)'
-Before:
-using Maui.DatePicker.Constants;
-After:
-using Maui.DatePicker.Constants;
-using Maui;
-using Maui.DatePicker;
-using Maui.DatePicker.Scheduler;
-*/
 using Maui.DatePicker.Constants;
 
 namespace Maui.DatePicker.Scheduler;
@@ -56,7 +46,8 @@ public class DayView : Border, IDayView
     #region Bindable Properties
 
     public static BindableProperty IsSelectedProperty
-       = BindableProperty.Create(nameof(IsSelected), typeof(bool), typeof(DayView), false);
+       = BindableProperty.Create(nameof(IsSelected), typeof(bool), typeof(DayView), false,
+           propertyChanged: (bindable, oldValue, newValue) => ((DayView)bindable).OnIsSelectedChanged((bool)oldValue, (bool)newValue));
 
     public static BindableProperty IsTodayProperty
         = BindableProperty.Create(nameof(IsToday), typeof(bool), typeof(DayView), false);
@@ -72,6 +63,7 @@ public class DayView : Border, IDayView
     #region Events
 
     public event EventHandler<TappedEventArgs> Tapped;
+    public event EventHandler IsSelectedChanged;
 
     #endregion
 
@@ -82,6 +74,13 @@ public class DayView : Border, IDayView
         var tabGestureRecognizer = new TapGestureRecognizer();
         tabGestureRecognizer.Tapped += OnTapped;
         GestureRecognizers.Add(tabGestureRecognizer);
+
+        var pointer = new PointerGestureRecognizer();
+        pointer.PointerEntered += PointerEntered;
+        pointer.PointerExited += PointerExited;
+        GestureRecognizers.Add(pointer);
+
+        Behaviors.Add(new DayViewIsSelectedBehavior());
 
         _title = new DayTitleView();
         Content = _title;
@@ -99,6 +98,31 @@ public class DayView : Border, IDayView
         }
     }
 
+    static void PointerEntered(object? sender, PointerEventArgs eventArgs)
+    {
+        var element = (DayView)sender;
+
+        if (element.IsSelected || element.IsDisable) return;
+
+        if (element.BackgroundColor == null || element.BackgroundColor == Colors.Transparent) element.BackgroundColor = Colors.White;
+
+        element.BackgroundColor = new Color(element.BackgroundColor.Red - .08f, element.BackgroundColor.Green - .08f, element.BackgroundColor.Blue - .08f);
+    }
+
+    static void PointerExited(object? sender, PointerEventArgs eventArgs)
+    {
+        var element = (DayView)sender;
+
+        if (element.IsSelected || element.IsDisable) return;
+
+        element.BackgroundColor = new Color(element.BackgroundColor.Red + .08f, element.BackgroundColor.Green + .08f, element.BackgroundColor.Blue + .08f);
+    }
+
+    protected virtual void OnIsSelectedChanged(bool oldValue, bool newValue)
+    {
+        IsSelectedChanged?.Invoke(this, System.EventArgs.Empty);
+    }
+
     public void Replace(IDayView newView)
     {
         DateTime = newView.DateTime;
@@ -109,4 +133,32 @@ public class DayView : Border, IDayView
     }
 
     #endregion
+}
+
+public class DayViewIsSelectedBehavior : Behavior<DayView>
+{
+    protected override void OnAttachedTo(DayView bindable)
+    {
+        bindable.IsSelectedChanged += IsSelectedChanged;
+        base.OnAttachedTo(bindable);
+    }
+
+    protected override void OnDetachingFrom(DayView bindable)
+    {
+        bindable.IsSelectedChanged -= IsSelectedChanged;
+        base.OnDetachingFrom(bindable);
+    }
+
+    void IsSelectedChanged(object? sender, System.EventArgs eventArgs)
+    {
+        var view = (DayView)sender;
+        if (view.IsSelected)
+        {
+            view.BackgroundColor = Color.FromArgb("C8C8C8");
+        }
+        else
+        {
+            view.BackgroundColor = Colors.White;
+        }
+    }
 }

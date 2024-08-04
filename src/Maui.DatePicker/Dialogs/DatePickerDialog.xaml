@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Maui.DatePicker.Dialogs.DatePickerDialog"
+             xmlns:local="clr-namespace:Maui.DatePicker"
+             xmlns:scheduler="clr-namespace:Maui.DatePicker.Scheduler"
+             x:Name="Self"
+             BindingContext="{x:Reference Self}">
+    <AbsoluteLayout >
+        <Button Text="DatePicker" x:Name="DatePicker" />
+        <local:Popup x:Name="popup" CloseByTappingOutside="True">
+            <local:Popup.Header>
+                <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,10" Padding="5,0" FlowDirection="LeftToRight">
+                    <HorizontalStackLayout Grid.Column="0" Spacing="5">
+                        <Label x:Name="currentMonth" FontSize="18" FontAttributes="Bold" VerticalTextAlignment="Center"/>
+                        <Label x:Name="currentYear" FontSize="18" FontAttributes="Bold" VerticalTextAlignment="Center">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="SelectYear" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </HorizontalStackLayout>
+                    <HorizontalStackLayout Spacing="10" Grid.Column="1" VerticalOptions="Center">
+                        <ImageButton Clicked="GoToPrevMonth" Source="{FontImageSource FontFamily=MaterialIconsOutlined, Glyph=chevron_left, Color=Black}"  MinimumWidthRequest="25" MinimumHeightRequest="25" WidthRequest="25" HeightRequest="25" x:Name="leftMonth"/>
+                        <ImageButton Clicked="GoToNextMonth" Source="{FontImageSource FontFamily=MaterialIconsOutlined, Glyph=chevron_right, Color=Black}" MinimumWidthRequest="25" MinimumHeightRequest="25" WidthRequest="25" HeightRequest="25"  x:Name="rightMonth"/>
+                    </HorizontalStackLayout>
+                </Grid>
+            </local:Popup.Header>
+            <scheduler:Scheduler x:Name="scheduler" ActiveMonthChanged="MonthChanged" />
+            <local:Popup.Footer>
+                <HorizontalStackLayout Spacing="10" HorizontalOptions="End">
+                    <Button Text="Cancell" />
+                    <Button Text="Ok"/>
+                </HorizontalStackLayout>
+            </local:Popup.Footer>
+        </local:Popup>
+    </AbsoluteLayout>
+</ContentView>
