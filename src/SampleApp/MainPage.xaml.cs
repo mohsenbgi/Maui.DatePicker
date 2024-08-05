@@ -10,6 +10,7 @@ namespace SampleApp
         public MainPage()
         {
             App.Current.UserAppTheme = AppTheme.Light;
+            Thread.CurrentThread.CurrentCulture = new PersianCulture();
             InitializeComponent();
         }
 

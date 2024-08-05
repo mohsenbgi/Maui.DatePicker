@@ -80,10 +80,10 @@ public partial class Scheduler : Grid
 
         if (Thread.CurrentThread.CurrentCulture.TextInfo.IsRightToLeft)
         {
-            Application.Current.Resources["GlobalFlowDirection"] = FlowDirection.RightToLeft;
+            Resources["GlobalFlowDirection"] = FlowDirection.RightToLeft;
         }
 
-        foreach (var item in Culture.Current.GetShortestDayNamesStartedFromFirstDayOfWeek(Culture.Current.DateTimeFormat.FirstDayOfWeek))
+        foreach (var item in Culture.Current.GetAbbreviatedDayNamesStartedFromFirstDayOfWeek(Culture.Current.DateTimeFormat.FirstDayOfWeek))
         {
             weekDays.Add(new Label()
             {
@@ -146,9 +146,9 @@ public partial class Scheduler : Grid
     {
         await Task.WhenAll(
                 SwipeLeft(_activeMonth),
-                SwipeLeft(_nextMonth));
+                SwipeLeft(_rightMonth));
      
-        ActiveMonth = _nextMonth;
+        ActiveMonth = _rightMonth;
         if (selectedDate is not null) _activeMonth.SelectedDate = selectedDate.Value;
     }
 
@@ -156,9 +156,9 @@ public partial class Scheduler : Grid
     {    
         await Task.WhenAll(
                 SwipeRight(_activeMonth),
-                SwipeRight(_prevMonth));
+                SwipeRight(_leftMonth));
      
-        ActiveMonth = _prevMonth;
+        ActiveMonth = _leftMonth;
         if (selectedDate is not null) ActiveMonth.SelectedDate = selectedDate.Value;
     }
 
@@ -206,10 +206,24 @@ public partial class Scheduler : Grid
 
             var toApplyXDiff = totalX - _appliedTotalXDiff;
 
+            #if WINDOWS
+            if (Culture.Current.TextInfo.IsRightToLeft)
+            {
+                toApplyXDiff = -toApplyXDiff;
+            }
+            #endif
+
             _activeMonth.TranslationX += toApplyXDiff;
 
             if (_appliedTotalXDiff > 0) _leftMonth.TranslationX += toApplyXDiff;
             else _rightMonth.TranslationX += toApplyXDiff;
+
+            #if WINDOWS
+            if (Culture.Current.TextInfo.IsRightToLeft)
+            {
+                toApplyXDiff = -toApplyXDiff;
+            }
+            #endif
 
             _appliedTotalXDiff += toApplyXDiff;
         }
@@ -263,8 +277,14 @@ public partial class Scheduler : Grid
     {
         if (ActiveMonth == monthView)
         {
-
-            await monthView.TranslateTo(Width, 0, Maui.DatePicker.Constants.Scheduler.AnimationsLength);
+            if (Culture.Current.TextInfo.IsRightToLeft && DeviceInfo.Current.Platform == DevicePlatform.WinUI)
+            {
+                await monthView.TranslateTo(-Width, 0, Maui.DatePicker.Constants.Scheduler.AnimationsLength);
+            }
+            else
+            {
+                await monthView.TranslateTo(Width, 0, Maui.DatePicker.Constants.Scheduler.AnimationsLength);
+            }
         }
         else
         {
@@ -276,7 +296,14 @@ public partial class Scheduler : Grid
     {
         if (ActiveMonth == monthView)
         {
-            await monthView.TranslateTo(-Width, 0, Maui.DatePicker.Constants.Scheduler.AnimationsLength);
+            if (Culture.Current.TextInfo.IsRightToLeft && DeviceInfo.Current.Platform == DevicePlatform.WinUI)
+            {
+                await monthView.TranslateTo(Width, 0, Maui.DatePicker.Constants.Scheduler.AnimationsLength);
+            }
+            else
+            {
+                await monthView.TranslateTo(-Width, 0, Maui.DatePicker.Constants.Scheduler.AnimationsLength);
+            }
         }
         else
         {
@@ -448,7 +475,7 @@ public partial class Scheduler : Grid
     {
         var toApplyX = 0d;
 
-        if (Culture.Current.TextInfo.IsRightToLeft)
+        if (Culture.Current.TextInfo.IsRightToLeft && DeviceInfo.Current.Platform != DevicePlatform.WinUI)
         {
             toApplyX = _activeMonth.ViewId < viewId ? -Width : Width;
         }
@@ -471,5 +498,5 @@ public partial class Scheduler : Grid
         monthView.Replace(monthData);
     }
 
-    #endregion
+#endregion
 }
