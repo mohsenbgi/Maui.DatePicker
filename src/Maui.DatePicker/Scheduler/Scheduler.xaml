@@ -39,7 +39,6 @@
             <Setter Property="AbsoluteLayout.LayoutFlags" Value="SizeProportional"/>
             <Setter Property="AbsoluteLayout.LayoutBounds" Value="0,0,1,1"/>
             <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource SchedulerGenericLightBackgroundColor}}"/>
-            <Setter Property="Spacing" Value="10" />
             <Setter Property="HorizontalOptions" Value="Center" />
             <Setter Property="FlowDirection" Value="{DynamicResource GlobalFlowDirection}" />
             <Setter Property="HeightRequest" Value="25"/>
@@ -49,7 +48,7 @@
             <Setter Property="TextColor" Value="{StaticResource Gray600}" />
             <Setter Property="FontSize" Value="12" />
             <Setter Property="FontAttributes" Value="Bold" />
-            <Setter Property="WidthRequest" Value="30"/>
+            <Setter Property="WidthRequest" Value="40"/>
             <Setter Property="HeightRequest" Value="25"/>
             <Setter Property="HorizontalTextAlignment" Value="Center" />
             <Setter Property="HorizontalOptions" Value="Center" />
@@ -59,7 +58,7 @@
 
         <Style TargetType="controls:WeekView">
             <Setter Property="HeightRequest" Value="{StaticResource WeeksHeight}" />
-            <Setter Property="Spacing" Value="10" />
+            <Setter Property="Spacing" Value="5" />
             <Setter Property="HorizontalOptions" Value="Center" />
         </Style>
 
@@ -72,7 +71,7 @@
             <Setter Property="StrokeThickness" Value="0"/>
             <Setter Property="HorizontalOptions" Value="Center"/>
             <Setter Property="VerticalOptions" Value="Center"/>
-            <Setter Property="Padding" Value="2.5"/>
+            <Setter Property="Padding" Value="5"/>
         </Style>
 
         <Style TargetType="controls:DayTitleView">
