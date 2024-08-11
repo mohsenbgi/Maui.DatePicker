@@ -1,6 +1,6 @@
 ﻿using Maui.DatePicker.Interfaces;
 
-namespace Maui.DatePicker.Scheduler
+namespace Maui.DatePicker.Calendar
 {
     public class DayTitleData : IDayTitleView
     {

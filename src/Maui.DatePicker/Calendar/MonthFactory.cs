@@ -3,7 +3,7 @@ using Maui.DatePicker.Extensions;
 using Maui.DatePicker.Interfaces;
 using System.Globalization;
 
-namespace Maui.DatePicker.Scheduler
+namespace Maui.DatePicker.Calendar
 {
     public static class MonthFactory
     {
@@ -16,16 +16,16 @@ namespace Maui.DatePicker.Scheduler
 
             DateTime firstDateOfMonth = realFirstDateOfMonth.GetFirstDateOfWeek();
 
-            WeekT[] weeks = new WeekT[Constants.Scheduler.NumberOfWeeksInMonth];
-            DayT[] days = new DayT[Constants.Scheduler.NumberOfDaysInMonth];
+            WeekT[] weeks = new WeekT[Constants.Calendar.NumberOfWeeksInMonth];
+            DayT[] days = new DayT[Constants.Calendar.NumberOfDaysInMonth];
 
             int dayIndex = 0;
-            for (int weekIndex = 0; weekIndex < Constants.Scheduler.NumberOfWeeksInMonth; weekIndex++)
+            for (int weekIndex = 0; weekIndex < Constants.Calendar.NumberOfWeeksInMonth; weekIndex++)
             {
                 var currentWeek = new WeekT();
                 weeks[weekIndex] = currentWeek;
 
-                for (int dayOfWeekIndex = 0; dayOfWeekIndex < Constants.Scheduler.NumberOfDaysInWeek; dayOfWeekIndex++)
+                for (int dayOfWeekIndex = 0; dayOfWeekIndex < Constants.Calendar.NumberOfDaysInWeek; dayOfWeekIndex++)
                 {
                     var currentDateOfMonth = firstDateOfMonth.AddDays(dayIndex);
 

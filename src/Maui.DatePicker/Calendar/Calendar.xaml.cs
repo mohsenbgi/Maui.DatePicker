@@ -7,9 +7,9 @@ using Maui.DatePicker.Interfaces;
 using System;
 using System.Globalization;
 
-namespace Maui.DatePicker.Scheduler;
+namespace Maui.DatePicker.Calendar;
 
-public partial class Scheduler : Grid
+public partial class Calendar : Grid
 {
     #region Fields
 
@@ -50,13 +50,13 @@ public partial class Scheduler : Grid
     public static readonly BindableProperty ActiveMonthProperty = BindableProperty.Create(
         nameof(ActiveMonth),
         typeof(IMonthView),
-        typeof(Scheduler),
+        typeof(Calendar),
         null,
         propertyChanged: (bindable, oldValue, newValue) =>
         {
-            if (bindable is Scheduler schedulerView)
+            if (bindable is Calendar calendarView)
             {
-                schedulerView.OnActiveMonthChanged((IMonthView?)oldValue, (IMonthView?)newValue);
+                calendarView.OnActiveMonthChanged((IMonthView?)oldValue, (IMonthView?)newValue);
             }
         }
     );
@@ -74,7 +74,7 @@ public partial class Scheduler : Grid
 
     #region Ctor
 
-    public Scheduler()
+    public Calendar()
     {
         InitializeComponent();
 
@@ -279,16 +279,16 @@ public partial class Scheduler : Grid
         {
             if (Culture.Current.TextInfo.IsRightToLeft && DeviceInfo.Current.Platform == DevicePlatform.WinUI)
             {
-                await monthView.TranslateTo(-Width, 0, Maui.DatePicker.Constants.Scheduler.AnimationsLength);
+                await monthView.TranslateTo(-Width, 0, Maui.DatePicker.Constants.Calendar.AnimationsLength);
             }
             else
             {
-                await monthView.TranslateTo(Width, 0, Maui.DatePicker.Constants.Scheduler.AnimationsLength);
+                await monthView.TranslateTo(Width, 0, Maui.DatePicker.Constants.Calendar.AnimationsLength);
             }
         }
         else
         {
-            await monthView.TranslateTo(0, 0, Maui.DatePicker.Constants.Scheduler.AnimationsLength);
+            await monthView.TranslateTo(0, 0, Maui.DatePicker.Constants.Calendar.AnimationsLength);
         }
     }
 
@@ -298,16 +298,16 @@ public partial class Scheduler : Grid
         {
             if (Culture.Current.TextInfo.IsRightToLeft && DeviceInfo.Current.Platform == DevicePlatform.WinUI)
             {
-                await monthView.TranslateTo(Width, 0, Maui.DatePicker.Constants.Scheduler.AnimationsLength);
+                await monthView.TranslateTo(Width, 0, Maui.DatePicker.Constants.Calendar.AnimationsLength);
             }
             else
             {
-                await monthView.TranslateTo(-Width, 0, Maui.DatePicker.Constants.Scheduler.AnimationsLength);
+                await monthView.TranslateTo(-Width, 0, Maui.DatePicker.Constants.Calendar.AnimationsLength);
             }
         }
         else
         {
-            await monthView.TranslateTo(0, 0, Maui.DatePicker.Constants.Scheduler.AnimationsLength);
+            await monthView.TranslateTo(0, 0, Maui.DatePicker.Constants.Calendar.AnimationsLength);
         }
     }
 
@@ -315,17 +315,17 @@ public partial class Scheduler : Grid
     {
         if (ActiveMonth == monthView)
         {
-            await monthView.TranslateTo(0, 0, Maui.DatePicker.Constants.Scheduler.AnimationsLength);
+            await monthView.TranslateTo(0, 0, Maui.DatePicker.Constants.Calendar.AnimationsLength);
         }
         else
         {
             if (monthView.TranslationX < 0)
             {
-                await monthView.TranslateTo(-Width, 0, Maui.DatePicker.Constants.Scheduler.AnimationsLength);
+                await monthView.TranslateTo(-Width, 0, Maui.DatePicker.Constants.Calendar.AnimationsLength);
             }
             else
             {
-                await monthView.TranslateTo(Width, 0, Maui.DatePicker.Constants.Scheduler.AnimationsLength);
+                await monthView.TranslateTo(Width, 0, Maui.DatePicker.Constants.Calendar.AnimationsLength);
             }
         }
 
@@ -385,7 +385,7 @@ public partial class Scheduler : Grid
         {
             var currentMonth = ActiveMonth;
 
-            for (int i = 0; i < Maui.DatePicker.Constants.Scheduler.GeneratedInVisibleMonthesCount; i++)
+            for (int i = 0; i < Maui.DatePicker.Constants.Calendar.GeneratedInVisibleMonthesCount; i++)
             {
                 var nextMonthInList = GetMonthView(currentMonth.ViewId + 1);
                 if (nextMonthInList is not null)
@@ -403,7 +403,7 @@ public partial class Scheduler : Grid
 
             currentMonth = ActiveMonth;
 
-            for (int i = 0; i < Maui.DatePicker.Constants.Scheduler.GeneratedInVisibleMonthesCount; i++)
+            for (int i = 0; i < Maui.DatePicker.Constants.Calendar.GeneratedInVisibleMonthesCount; i++)
             {
                 var prevMonthInList = GetMonthView(currentMonth.ViewId - 1);
                 if (prevMonthInList is not null)

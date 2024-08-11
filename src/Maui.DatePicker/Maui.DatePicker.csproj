@@ -30,8 +30,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="Scheduler\Scheduler.xaml.cs">
-	    <DependentUpon>Scheduler.xaml</DependentUpon>
+	  <Compile Update="Calendar\Calendar.xaml.cs">
+	    <DependentUpon>Calendar.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 

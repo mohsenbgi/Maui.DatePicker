@@ -1,6 +1,6 @@
 ﻿using Maui.DatePicker.Interfaces;
 
-namespace Maui.DatePicker.Scheduler
+namespace Maui.DatePicker.Calendar
 {
     public record MonthData : IMonthView
     {
@@ -16,11 +16,11 @@ namespace Maui.DatePicker.Scheduler
 
         public void Replace(IMonthView newView)
         {
-            for (int i = 0; i < Constants.Scheduler.NumberOfWeeksInMonth; i++)
+            for (int i = 0; i < Constants.Calendar.NumberOfWeeksInMonth; i++)
             {
                 Weeks[i].Replace(newView.Weeks[i]);
             }
-            for (int i = 0; i < Constants.Scheduler.NumberOfDaysInMonth; i++)
+            for (int i = 0; i < Constants.Calendar.NumberOfDaysInMonth; i++)
             {
                 Days[i].Replace(newView.Days[i]);
             }

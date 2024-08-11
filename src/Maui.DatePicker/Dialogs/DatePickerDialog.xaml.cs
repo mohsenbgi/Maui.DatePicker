@@ -28,20 +28,20 @@ public partial class DatePickerDialog : ContentView
 
     public void GoToNextMonth(object sender, System.EventArgs eventArgs)
     {
-        scheduler.GoToRightMonth();
+        calendar.GoToRightMonth();
     }
 
     public void GoToPrevMonth(object sender, System.EventArgs eventArgs)
     {
-        scheduler.GoToLeftMonth();
+        calendar.GoToLeftMonth();
     }
 
     public async void OnYearSelected(object sender, int selectedYear)
     {
-        var currentDate = scheduler.ActiveMonth.SelectedDate;
+        var currentDate = calendar.ActiveMonth.SelectedDate;
         var calendar = Thread.CurrentThread.CurrentCulture.Calendar;
         var expectedDate = new DateTime(selectedYear, calendar.GetMonth(currentDate), calendar.GetDayOfMonth(currentDate), calendar);
-        scheduler.GoToDate(expectedDate);
+        calendar.GoToDate(expectedDate);
         await popup.NavigateBack();
     }
 

@@ -1,7 +1,7 @@
 ﻿using Maui.DatePicker.Interfaces;
 using Maui.DatePicker.Constants;
 
-namespace Maui.DatePicker.Scheduler
+namespace Maui.DatePicker.Calendar
 {
     public class WeekData : IWeekView
     {
@@ -9,7 +9,7 @@ namespace Maui.DatePicker.Scheduler
 
         public WeekData()
         {
-            _days = new Lazy<IDayView[]>(() => (new IDayView[Constants.Scheduler.NumberOfDaysInWeek]));
+            _days = new Lazy<IDayView[]>(() => (new IDayView[Constants.Calendar.NumberOfDaysInWeek]));
         }
 
         public bool IsSelected { get; set; }
@@ -23,7 +23,7 @@ namespace Maui.DatePicker.Scheduler
 
         public void Replace(IWeekView newView)
         {
-            for (int i = 0; i < Constants.Scheduler.NumberOfDaysInWeek; i++)
+            for (int i = 0; i < Constants.Calendar.NumberOfDaysInWeek; i++)
             {
                 _days.Value[i].Replace(newView.Days[i]);
             }

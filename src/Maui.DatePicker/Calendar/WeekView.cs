@@ -7,11 +7,11 @@ After:
 using Maui.DatePicker.Constants;
 using Maui;
 using Maui.DatePicker;
-using Maui.DatePicker.Scheduler;
+using Maui.DatePicker.Calendar;
 */
 using Maui.DatePicker.Constants;
 
-namespace Maui.DatePicker.Scheduler;
+namespace Maui.DatePicker.Calendar;
 
 public class WeekView : HorizontalStackLayout, IWeekView
 {
@@ -46,7 +46,7 @@ public class WeekView : HorizontalStackLayout, IWeekView
 
     public WeekView()
     {
-        _days = new DayView[Constants.Scheduler.NumberOfDaysInWeek];
+        _days = new DayView[Constants.Calendar.NumberOfDaysInWeek];
     }
 
     #endregion
@@ -72,7 +72,7 @@ public class WeekView : HorizontalStackLayout, IWeekView
 
     public void Replace(IWeekView newView)
     {
-        for (int i = 0; i < Constants.Scheduler.NumberOfDaysInWeek; i++)
+        for (int i = 0; i < Constants.Calendar.NumberOfDaysInWeek; i++)
         {
             _days[i].Replace(newView.Days[i]);
         }

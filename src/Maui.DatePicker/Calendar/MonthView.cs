@@ -1,7 +1,7 @@
 using Maui.DatePicker.EventArgs;
 using Maui.DatePicker.Interfaces;
 
-namespace Maui.DatePicker.Scheduler
+namespace Maui.DatePicker.Calendar
 {
     public class MonthView : VerticalStackLayout, IMonthView
     {
@@ -134,12 +134,12 @@ namespace Maui.DatePicker.Scheduler
 
         public void Replace(IMonthView newView)
         {
-            for (int i = 0; i < Constants.Scheduler.NumberOfWeeksInMonth; i++)
+            for (int i = 0; i < Constants.Calendar.NumberOfWeeksInMonth; i++)
             {
                 _weeks[i].Replace(newView.Weeks[i]);
             }
 
-            for (int i = 0; i < Constants.Scheduler.NumberOfDaysInMonth; i++)
+            for (int i = 0; i < Constants.Calendar.NumberOfDaysInMonth; i++)
             {
                 _days[i].Replace(newView.Days[i]);
             }

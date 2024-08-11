@@ -1,7 +1,7 @@
 ﻿using Maui.DatePicker.Interfaces;
 using Maui.DatePicker.Constants;
 
-namespace Maui.DatePicker.Scheduler;
+namespace Maui.DatePicker.Calendar;
 
 public class DayView : Border, IDayView
 {
