@@ -39,8 +39,8 @@ public partial class DatePickerDialog : ContentView
     public async void OnYearSelected(object sender, int selectedYear)
     {
         var currentDate = calendar.ActiveMonth.SelectedDate;
-        var calendar = Thread.CurrentThread.CurrentCulture.Calendar;
-        var expectedDate = new DateTime(selectedYear, calendar.GetMonth(currentDate), calendar.GetDayOfMonth(currentDate), calendar);
+        var cal = Thread.CurrentThread.CurrentCulture.Calendar;
+        var expectedDate = new DateTime(selectedYear, cal.GetMonth(currentDate), cal.GetDayOfMonth(currentDate), cal);
         calendar.GoToDate(expectedDate);
         await popup.NavigateBack();
     }
