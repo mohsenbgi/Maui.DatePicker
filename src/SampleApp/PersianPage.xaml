@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SampleApp.PersianPage"
+             xmlns:dp="clr-namespace:Maui.DatePicker.Dialogs;assembly=Maui.DatePicker">
+
+    <Grid>
+        <dp:DatePickerDialog Language="Persian"/>
+        <VerticalStackLayout TranslationX="200">
+            <Button Text="Light" x:Name="LightBtn" WidthRequest="50"/>
+            <Button Text="Dark"  x:Name="DarkBtn" WidthRequest="50"/>
+            <DatePicker WidthRequest="100" HeightRequest="100"/>
+        </VerticalStackLayout>
+    </Grid>
+
+</ContentPage>

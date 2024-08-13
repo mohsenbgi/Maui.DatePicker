@@ -66,4 +66,22 @@
 	  <ProjectReference Include="..\Maui.DatePicker\Maui.DatePicker.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Compile Update="PersianPage.xaml.cs">
+	    <DependentUpon>PersianPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="EnglishPage.xaml.cs">
+	    <DependentUpon>EnglishPage.xaml</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiXaml Update="PersianPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="EnglishPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	</ItemGroup>
+
 </Project>

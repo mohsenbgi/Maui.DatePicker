@@ -4,12 +4,16 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:SampleApp"
-    Shell.FlyoutBehavior="Disabled"
+    Shell.FlyoutBehavior="Flyout"
     Title="SampleApp">
 
     <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+        Title="Persian"
+        ContentTemplate="{DataTemplate local:PersianPage}"
+        Route="PersianPage" />
+    <ShellContent
+        Title="English"
+        ContentTemplate="{DataTemplate local:EnglishPage}"
+        Route="EnglishPage" />
 
 </Shell>
