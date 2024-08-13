@@ -1,18 +1,6 @@
 ﻿using Maui.DatePicker.Interfaces;
 
-/* Unmerged change from project 'Maui.DatePicker (net8.0-android)'
-Before:
-using Maui.DatePicker.Constants;
-After:
-using Maui.DatePicker.Constants;
-using Maui;
-using Maui.DatePicker;
-using Maui.DatePicker.Calendar;
-*/
-using Maui.DatePicker.Constants;
-
 namespace Maui.DatePicker.Calendar;
-
 public class WeekView : HorizontalStackLayout, IWeekView
 {
     #region Fields

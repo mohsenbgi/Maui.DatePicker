@@ -2,30 +2,37 @@
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Maui.DatePicker.Dialogs.DatePickerDialog"
+             x:Name="Self"
              xmlns:local="clr-namespace:Maui.DatePicker"
              xmlns:calendar="clr-namespace:Maui.DatePicker.Calendar"
-             x:Name="Self"
+             xmlns:behavior="clr-namespace:Maui.DatePicker.Behaviors"
              BindingContext="{x:Reference Self}">
     <AbsoluteLayout >
         <Button Text="DatePicker" x:Name="DatePicker" />
         <local:Popup x:Name="popup" CloseByTappingOutside="True">
             <local:Popup.Header>
-                <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,10" Padding="5,0" FlowDirection="LeftToRight">
-                    <HorizontalStackLayout Grid.Column="0" Spacing="5">
-                        <Label x:Name="currentMonth" FontSize="18" FontAttributes="Bold" VerticalTextAlignment="Center"/>
-                        <Label x:Name="currentYear" FontSize="18" FontAttributes="Bold" VerticalTextAlignment="Center">
-                            <Label.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="SelectYear" />
-                            </Label.GestureRecognizers>
-                        </Label>
-                    </HorizontalStackLayout>
-                    <HorizontalStackLayout Spacing="10" Grid.Column="1" VerticalOptions="Center">
+                <Grid ColumnDefinitions="*,Auto" VerticalOptions="Center" HeightRequest="30" Margin="5,0" FlowDirection="LeftToRight">
+                    <Border StrokeThickness="0" Padding="5">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="5" />
+                        </Border.StrokeShape>
+                        <Border.Behaviors>
+                            <behavior:HoverBehavior />
+                        </Border.Behaviors>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="ChangeDialog" />
+                        </Border.GestureRecognizers>
+                        <HorizontalStackLayout Grid.Column="0" Spacing="5">
+                            <Label x:Name="currentMonth" FontSize="14" FontFamily="OpenSansSemibold" VerticalTextAlignment="Center"/>
+                            <Label x:Name="currentYear" FontSize="14" FontFamily="OpenSansSemibold" VerticalTextAlignment="Center" />
+                        </HorizontalStackLayout>
+                    </Border>
+                    <HorizontalStackLayout Spacing="10" Grid.Column="2" VerticalOptions="Center" x:Name="navBox">
                         <ImageButton Clicked="GoToPrevMonth" Source="{FontImageSource FontFamily=MaterialIconsOutlined, Glyph=chevron_left, Color=Black}"  MinimumWidthRequest="25" MinimumHeightRequest="25" WidthRequest="25" HeightRequest="25" x:Name="leftMonth"/>
                         <ImageButton Clicked="GoToNextMonth" Source="{FontImageSource FontFamily=MaterialIconsOutlined, Glyph=chevron_right, Color=Black}" MinimumWidthRequest="25" MinimumHeightRequest="25" WidthRequest="25" HeightRequest="25"  x:Name="rightMonth"/>
                     </HorizontalStackLayout>
                 </Grid>
             </local:Popup.Header>
-            <calendar:Calendar x:Name="calendar" ActiveMonthChanged="MonthChanged" />
             <local:Popup.Footer>
                 <HorizontalStackLayout Spacing="10" HorizontalOptions="End">
                     <Button Text="Cancell" />

@@ -1,4 +1,5 @@
 ﻿using Maui.DatePicker.Constants;
+using Maui.DatePicker.Enums;
 using Maui.DatePicker.Extensions;
 using Maui.DatePicker.Interfaces;
 using System.Globalization;
@@ -12,7 +13,7 @@ namespace Maui.DatePicker.Calendar
             where DayT : IDayView, new()
             where DayTitleT : IDayTitleView, new()
         {
-            DateTime realFirstDateOfMonth = selectedDate.AddDays(-Culture.Current.Calendar.GetDayOfMonth(selectedDate) + 1);
+            DateTime realFirstDateOfMonth = selectedDate.AddDays(-Config.Language.GetCalendar().GetDayOfMonth(selectedDate) + 1);
 
             DateTime firstDateOfMonth = realFirstDateOfMonth.GetFirstDateOfWeek();
 
@@ -34,9 +35,9 @@ namespace Maui.DatePicker.Calendar
                         DateTime = currentDateOfMonth,
                         IsToday = currentDateOfMonth.IsToday(),
                         IsSelected = currentDateOfMonth.Date == selectedDate.Date,
-                        IsDisable = Culture.Current.Calendar.GetMonth(currentDateOfMonth) != Culture.Current.Calendar.GetMonth(selectedDate)
+                        IsDisable = Config.Language.GetCalendar().GetMonth(currentDateOfMonth) != Config.Language.GetCalendar().GetMonth(selectedDate)
                     };
-                    toAddDay.Title.Text = Culture.Current.Calendar.GetDayOfMonth(currentDateOfMonth).ToString();
+                    toAddDay.Title.Text = Config.Language.GetCalendar().GetDayOfMonth(currentDateOfMonth).ToString();
 
                     currentWeek.AddDay(dayOfWeekIndex, toAddDay);
                     days[dayIndex] = toAddDay;

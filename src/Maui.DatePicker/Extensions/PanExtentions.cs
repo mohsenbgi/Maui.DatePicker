@@ -1,4 +1,6 @@
-﻿namespace Maui.DatePicker.Extensions
+﻿using Maui.DatePicker.Enums;
+
+namespace Maui.DatePicker.Extensions
 {
     public static class PanExtentions
     {

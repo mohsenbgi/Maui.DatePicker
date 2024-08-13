@@ -1,4 +1,4 @@
-﻿namespace Maui.DatePicker
+﻿namespace Maui.DatePicker.Enums
 {
     public enum PanDirection
     {
@@ -8,4 +8,5 @@
 
         Vertical
     }
+
 }

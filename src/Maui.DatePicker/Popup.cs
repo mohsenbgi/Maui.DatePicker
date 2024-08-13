@@ -4,9 +4,11 @@ using Microsoft.Maui.Controls;
 using Microsoft.Maui.Controls.Shapes;
 using Microsoft.Maui.Layouts;
 using System.ComponentModel;
+using System.Globalization;
+using System.Reflection;
+using System.Runtime.Serialization;
 
 namespace Maui.DatePicker;
-
 [ContentProperty(nameof(Content))]
 public partial class Popup : ContentView
 {
@@ -165,13 +167,9 @@ public partial class Popup : ContentView
     {
         var currentView = _contentViews.Peek();
 
-        view.MaximumHeightRequest = currentView.DesiredSize.Height;
-        view.MaximumWidthRequest = currentView.DesiredSize.Width;
-        if(view is ScrollView scrollView)
-        {
-            view.MaximumHeightRequest = scrollView.Content.DesiredSize.Height;
-            view.MaximumWidthRequest = scrollView.Content.DesiredSize.Width;
-        }
+        var firstView = _contentViews.First();
+        view.MaximumHeightRequest = firstView.Height;
+        view.MaximumWidthRequest = firstView.Width;
 
         _contentViews.Push(view);
 
@@ -258,7 +256,7 @@ public class PopupContentPresenter : Border
     {
         StrokeThickness = 0;
         BackgroundColor = Colors.White;
-        Padding = new Thickness(10, 15);
+        Padding = new Thickness(0, 5);
         VerticalOptions = LayoutOptions.Center;
         HorizontalOptions = LayoutOptions.Center;
         StrokeShape = new RoundRectangle

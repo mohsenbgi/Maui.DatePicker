@@ -1,5 +1,4 @@
 ﻿using Maui.DatePicker.Constants;
-using System.Globalization;
 
 namespace Maui.DatePicker.Extensions
 {
@@ -7,7 +6,7 @@ namespace Maui.DatePicker.Extensions
     {
         public static DateTime GetFirstDateOfWeek(this DateTime date)
         {
-            var difference = (7 + (date.DayOfWeek - Culture.Current.DateTimeFormat.FirstDayOfWeek)) % 7;
+            var difference = (7 + (date.DayOfWeek - Config.Language.GetCulture().DateTimeFormat.FirstDayOfWeek)) % 7;
             return date.AddDays(-1 * difference).Date;
         }
 
@@ -18,8 +17,8 @@ namespace Maui.DatePicker.Extensions
 
         public static DateTime GetPrevMonthFirstDay(this DateTime date)
         {
-            int currentYear = Culture.Current.Calendar.GetYear(date);
-            int currentMonth = Culture.Current.Calendar.GetMonth(date);
+            int currentYear = Config.Language.GetCalendar().GetYear(date);
+            int currentMonth = Config.Language.GetCalendar().GetMonth(date);
 
             int nextMonth = currentMonth - 1;
             if (nextMonth < 1)
@@ -28,13 +27,13 @@ namespace Maui.DatePicker.Extensions
                 currentYear--;
             }
 
-            return Culture.Current.Calendar.ToDateTime(currentYear, nextMonth, 1, 0, 0, 0, 0);
+            return Config.Language.GetCalendar().ToDateTime(currentYear, nextMonth, 1, 0, 0, 0, 0);
         }
 
         public static DateTime GetNextMonthFirstDay(this DateTime date)
         {
-            int currentYear = Culture.Current.Calendar.GetYear(date);
-            int currentMonth = Culture.Current.Calendar.GetMonth(date);
+            int currentYear = Config.Language.GetCalendar().GetYear(date);
+            int currentMonth = Config.Language.GetCalendar().GetMonth(date);
 
             int nextMonth = currentMonth + 1;
             if (nextMonth > 12)
@@ -43,7 +42,7 @@ namespace Maui.DatePicker.Extensions
                 currentYear++;
             }
 
-            return Culture.Current.Calendar.ToDateTime(currentYear, nextMonth, 1, 0, 0, 0, 0);
+            return Config.Language.GetCalendar().ToDateTime(currentYear, nextMonth, 1, 0, 0, 0, 0);
         }
     }
 }

@@ -1,11 +1,10 @@
 using Maui.DatePicker.Animations;
 using Maui.DatePicker.Constants;
+using Maui.DatePicker.Enums;
 using Maui.DatePicker.EventArgs;
 using Maui.DatePicker.Extensions;
 using Maui.DatePicker.Helpers;
 using Maui.DatePicker.Interfaces;
-using System;
-using System.Globalization;
 
 namespace Maui.DatePicker.Calendar;
 
@@ -24,8 +23,8 @@ public partial class Calendar : Grid
     MonthView _prevMonth;
     MonthView _nextMonth;
     MonthView _activeMonth;
-    MonthView _leftMonth => Culture.Current.TextInfo.IsRightToLeft ? _nextMonth : _prevMonth;
-    MonthView _rightMonth => Culture.Current.TextInfo.IsRightToLeft ? _prevMonth : _nextMonth;
+    MonthView _leftMonth => Config.Language.IsRightToLeft() ? _nextMonth : _prevMonth;
+    MonthView _rightMonth => Config.Language.IsRightToLeft() ? _prevMonth : _nextMonth;
 
     #endregion
 
@@ -42,7 +41,6 @@ public partial class Calendar : Grid
         get => (double)GetValue(ThresholdProperty);
         set => SetValue(ThresholdProperty, value);
     }
-
     #endregion
 
     #region Bindable Properties
@@ -78,12 +76,9 @@ public partial class Calendar : Grid
     {
         InitializeComponent();
 
-        if (Thread.CurrentThread.CurrentCulture.TextInfo.IsRightToLeft)
-        {
-            Resources["GlobalFlowDirection"] = FlowDirection.RightToLeft;
-        }
+        Resources["GlobalFlowDirection"] = Config.Language.GetDirection();
 
-        foreach (var item in Culture.Current.GetAbbreviatedDayNamesStartedFromFirstDayOfWeek(Culture.Current.DateTimeFormat.FirstDayOfWeek))
+        foreach (var item in Config.Language.GetCulture().GetAbbreviatedDayNamesStartedFromFirstDayOfWeek(Config.Language.GetCulture().DateTimeFormat.FirstDayOfWeek))
         {
             weekDays.Add(new Label()
             {
@@ -113,6 +108,12 @@ public partial class Calendar : Grid
     #endregion
 
     #region Methods
+
+    public void OnLanguageChanged(Language oldValue, Language newValue)
+    {
+        var flowDirection = newValue.GetDirection();
+        Resources["GlobalFlowDirection"] = flowDirection;
+    }
 
     public IMonthView? GetMonthView(int viewId)
     {
@@ -207,7 +208,7 @@ public partial class Calendar : Grid
             var toApplyXDiff = totalX - _appliedTotalXDiff;
 
             #if WINDOWS
-            if (Culture.Current.TextInfo.IsRightToLeft)
+            if (Config.Language.IsRightToLeft())
             {
                 toApplyXDiff = -toApplyXDiff;
             }
@@ -219,7 +220,7 @@ public partial class Calendar : Grid
             else _rightMonth.TranslationX += toApplyXDiff;
 
             #if WINDOWS
-            if (Culture.Current.TextInfo.IsRightToLeft)
+            if (Config.Language.IsRightToLeft())
             {
                 toApplyXDiff = -toApplyXDiff;
             }
@@ -277,7 +278,7 @@ public partial class Calendar : Grid
     {
         if (ActiveMonth == monthView)
         {
-            if (Culture.Current.TextInfo.IsRightToLeft && DeviceInfo.Current.Platform == DevicePlatform.WinUI)
+            if (Config.Language.IsRightToLeft() && DeviceInfo.Current.Platform == DevicePlatform.WinUI)
             {
                 await monthView.TranslateTo(-Width, 0, Maui.DatePicker.Constants.Calendar.AnimationsLength);
             }
@@ -296,7 +297,7 @@ public partial class Calendar : Grid
     {
         if (ActiveMonth == monthView)
         {
-            if (Culture.Current.TextInfo.IsRightToLeft && DeviceInfo.Current.Platform == DevicePlatform.WinUI)
+            if (Config.Language.IsRightToLeft() && DeviceInfo.Current.Platform == DevicePlatform.WinUI)
             {
                 await monthView.TranslateTo(Width, 0, Maui.DatePicker.Constants.Calendar.AnimationsLength);
             }
@@ -385,7 +386,7 @@ public partial class Calendar : Grid
         {
             var currentMonth = ActiveMonth;
 
-            for (int i = 0; i < Maui.DatePicker.Constants.Calendar.GeneratedInVisibleMonthesCount; i++)
+            for (int i = 0; i < Maui.DatePicker.Constants.Calendar.GeneratedInVisibleMonthsCount; i++)
             {
                 var nextMonthInList = GetMonthView(currentMonth.ViewId + 1);
                 if (nextMonthInList is not null)
@@ -403,7 +404,7 @@ public partial class Calendar : Grid
 
             currentMonth = ActiveMonth;
 
-            for (int i = 0; i < Maui.DatePicker.Constants.Calendar.GeneratedInVisibleMonthesCount; i++)
+            for (int i = 0; i < Maui.DatePicker.Constants.Calendar.GeneratedInVisibleMonthsCount; i++)
             {
                 var prevMonthInList = GetMonthView(currentMonth.ViewId - 1);
                 if (prevMonthInList is not null)
@@ -475,7 +476,7 @@ public partial class Calendar : Grid
     {
         var toApplyX = 0d;
 
-        if (Culture.Current.TextInfo.IsRightToLeft && DeviceInfo.Current.Platform != DevicePlatform.WinUI)
+        if (Config.Language.IsRightToLeft() && DeviceInfo.Current.Platform != DevicePlatform.WinUI)
         {
             toApplyX = _activeMonth.ViewId < viewId ? -Width : Width;
         }

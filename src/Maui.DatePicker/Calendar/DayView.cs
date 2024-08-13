@@ -69,6 +69,7 @@ public class DayView : Border, IDayView
 
     #region Ctor
 
+    Color _originBackgroundColor;
     public DayView()
     {
         var tabGestureRecognizer = new TapGestureRecognizer();
@@ -98,7 +99,7 @@ public class DayView : Border, IDayView
         }
     }
 
-    static void PointerEntered(object? sender, PointerEventArgs eventArgs)
+    void PointerEntered(object? sender, PointerEventArgs eventArgs)
     {
         var element = (DayView)sender;
 
@@ -106,16 +107,16 @@ public class DayView : Border, IDayView
 
         if (element.BackgroundColor == null || element.BackgroundColor == Colors.Transparent) element.BackgroundColor = Colors.White;
 
-        element.BackgroundColor = new Color(element.BackgroundColor.Red - .08f, element.BackgroundColor.Green - .08f, element.BackgroundColor.Blue - .08f);
+        _originBackgroundColor = element.BackgroundColor;
+        element.BackgroundColor = new Color(element.BackgroundColor.Red - .04f, element.BackgroundColor.Green - .04f, element.BackgroundColor.Blue - .04f);
     }
 
-    static void PointerExited(object? sender, PointerEventArgs eventArgs)
+    void PointerExited(object? sender, PointerEventArgs eventArgs)
     {
         var element = (DayView)sender;
 
         if (element.IsSelected || element.IsDisable) return;
-
-        element.BackgroundColor = new Color(element.BackgroundColor.Red + .08f, element.BackgroundColor.Green + .08f, element.BackgroundColor.Blue + .08f);
+        element.BackgroundColor = _originBackgroundColor;
     }
 
     protected virtual void OnIsSelectedChanged(bool oldValue, bool newValue)
@@ -154,7 +155,7 @@ public class DayViewIsSelectedBehavior : Behavior<DayView>
         var view = (DayView)sender;
         if (view.IsSelected)
         {
-            view.BackgroundColor = Color.FromArgb("C8C8C8");
+            view.BackgroundColor = Color.FromArgb("E6E6E6");
         }
         else
         {

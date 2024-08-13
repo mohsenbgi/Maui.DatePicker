@@ -1,3 +1,6 @@
+using Maui.DatePicker.Constants;
+using Maui.DatePicker.Extensions;
+
 namespace Maui.DatePicker.Dialogs;
 
 public partial class SelectYearDialog : CollectionView
@@ -11,6 +14,7 @@ public partial class SelectYearDialog : CollectionView
             OnPropertyChanged();
         }
     }
+    public string SelectedYear { get; set; }
 
     public EventHandler<int> YearSelected;
 
@@ -20,25 +24,29 @@ public partial class SelectYearDialog : CollectionView
         InitializeComponent();
 
         YearsDataItems = new List<string>(200);
-        int startYear = Thread.CurrentThread.CurrentCulture.Calendar.GetYear(DateTime.Now.AddYears(-100));
+        int startYear = Config.Language.GetCalendar().GetYear(DateTime.Now.AddYears(-100));
         for (int year = startYear; year < startYear + 200; year++)
         {
             YearsDataItems.Add(year.ToString());
         }
+        SelectedYear = Config.Language.GetCalendar().GetYear(DateTime.Now).ToString();
 
         #if WINDOWS
-                SizeChanged += (s, e) => ScrollTo(25, position: ScrollToPosition.Center, animate: false);
+            Loaded += (s, e) => ScrollTo(YearsDataItems.IndexOf(SelectedYear), position: ScrollToPosition.Center, animate: false);
         #else
-                SizeChanged += (s, e) => ScrollTo(Thread.CurrentThread.CurrentCulture.Calendar.GetYear(DateTime.Now).ToString(), null, ScrollToPosition.Center, false);
+            Loaded += (s, e) => ScrollTo(SelectedYear, null, ScrollToPosition.Center, false);
         #endif
 
     }
 
     public void OnYearTapped(object sender, TappedEventArgs eventArgs)
     {
-        var selectedYear = int.Parse(((Label)((Border)sender).Content).Text);
-        YearSelected?.Invoke(sender, selectedYear);
+        SelectedYear = ((Label)((Border)sender).Content).Text;
+        YearSelected?.Invoke(sender, int.Parse(SelectedYear));
     }
 
-    
+    protected override void OnSizeAllocated(double width, double height)
+    {
+        base.OnSizeAllocated(width, height);
+    }
 }

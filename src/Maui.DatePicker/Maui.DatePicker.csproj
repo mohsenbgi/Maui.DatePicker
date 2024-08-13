@@ -39,6 +39,9 @@
 	  <MauiXaml Update="Dialogs\DatePickerDialog.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Dialogs\SelectMonthDialog.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Dialogs\SelectYearDialog.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

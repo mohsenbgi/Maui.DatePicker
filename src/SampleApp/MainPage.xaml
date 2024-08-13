@@ -5,7 +5,7 @@
              xmlns:dp="clr-namespace:Maui.DatePicker.Dialogs;assembly=Maui.DatePicker">
 
     <Grid>
-        <dp:DatePickerDialog/>
+        <dp:DatePickerDialog Language="English"/>
         <DatePicker TranslationX="200" WidthRequest="100" HeightRequest="100"/>
     </Grid>
 

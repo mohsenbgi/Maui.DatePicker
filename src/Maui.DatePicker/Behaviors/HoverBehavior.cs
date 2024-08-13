@@ -2,21 +2,26 @@
 {
     public class HoverBehavior : Behavior<VisualElement>
     {
-        Lazy<PointerGestureRecognizer> PointerGesture = new Lazy<PointerGestureRecognizer>(() =>
-        {
-            var pointer = new PointerGestureRecognizer();
-            pointer.PointerEntered += PointerEntered;
-            pointer.PointerExited += PointerExited;
+        Color _originBackgroundColor;
+        PointerGestureRecognizer _pointerGestureRecognizer;
 
-            return pointer;
-        });
+
+        public HoverBehavior()
+        {
+            _pointerGestureRecognizer = new PointerGestureRecognizer();
+            _pointerGestureRecognizer.PointerEntered += PointerEntered;
+            _pointerGestureRecognizer.PointerExited += PointerExited;
+        }
 
         protected override void OnAttachedTo(VisualElement bindable)
         {
-            if (bindable is IGestureRecognizers gestures)
+            if (bindable is IGestureRecognizers gesture)
             {
-                gestures.GestureRecognizers.Add(PointerGesture.Value);
+                gesture.GestureRecognizers.Add(_pointerGestureRecognizer);
             }
+            _originBackgroundColor = bindable.BackgroundColor;
+            bindable.Unloaded += (s, e) => PointerExited(bindable, new PointerEventArgs());
+
             base.OnAttachedTo(bindable);
         }
 
@@ -24,26 +29,26 @@
         {
             if (bindable is IGestureRecognizers gestures)
             {
-                gestures.GestureRecognizers.Remove(PointerGesture.Value);
+                gestures.GestureRecognizers.Remove(_pointerGestureRecognizer);
             }
             base.OnDetachingFrom(bindable);
         }
 
 
-        static void PointerEntered(object? sender, PointerEventArgs eventArgs)
+        void PointerEntered(object? sender, PointerEventArgs eventArgs)
         {
             var element = (VisualElement)sender;
 
             if (element.BackgroundColor == null || element.BackgroundColor == Colors.Transparent) element.BackgroundColor = Colors.White;
 
-            element.BackgroundColor = new Color(element.BackgroundColor.Red - .08f, element.BackgroundColor.Green - .08f, element.BackgroundColor.Blue - .08f);
+            element.BackgroundColor = new Color(element.BackgroundColor.Red - .04f, element.BackgroundColor.Green - .04f, element.BackgroundColor.Blue - .04f);
         }
 
-        static void PointerExited(object? sender, PointerEventArgs eventArgs)
+        void PointerExited(object? sender, PointerEventArgs eventArgs)
         {
             var element = (VisualElement)sender;
 
-            element.BackgroundColor = new Color(element.BackgroundColor.Red + .08f, element.BackgroundColor.Green + .08f, element.BackgroundColor.Blue + .08f);
+            element.BackgroundColor = _originBackgroundColor;
         }
     }
 }
