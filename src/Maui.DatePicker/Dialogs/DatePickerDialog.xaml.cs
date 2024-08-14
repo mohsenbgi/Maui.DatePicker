@@ -7,7 +7,7 @@ using System;
 
 namespace Maui.DatePicker.Dialogs;
 
-public partial class DatePickerDialog : ContentView
+public partial class DatePickerDialog : Popup
 {
     public static BindableProperty LanguageProperty =
         BindableProperty.Create(nameof(Language), typeof(Language), typeof(DatePickerDialog), null,
@@ -25,11 +25,6 @@ public partial class DatePickerDialog : ContentView
     public DatePickerDialog()
     {
         InitializeComponent();
-
-        var tap = new TapGestureRecognizer();
-        tap.Tapped += (s, e) => popup.Open();
-        DatePicker.Focused += (s, e) => popup.Open();
-        DatePicker.Clicked += (s, e) => popup.Open();
     }
 
     public void OnLanguageChanged(Language oldValue, Language newValue)
@@ -39,7 +34,7 @@ public partial class DatePickerDialog : ContentView
 
         _calendar = new Calendar.Calendar();
         _calendar.ActiveMonthChanged += MonthChanged;
-        popup.Content = _calendar;
+        Content = _calendar;
 
         _yearsView = new SelectYearDialog();
         _yearsView.YearSelected += OnYearSelected;
@@ -70,7 +65,7 @@ public partial class DatePickerDialog : ContentView
     public async void OnYearSelected(object? sender, int selectedYear)
     {
         currentYear.Text = selectedYear.ToString();
-        await popup.NavigateBack();
+        await NavigateBack();
     }
 
     public async void OnMonthSelected(object? sender, int selectedMonth)
@@ -81,15 +76,15 @@ public partial class DatePickerDialog : ContentView
         _calendar.GoToDate(expectedDate);
         currentMonth.IsVisible = true;
         navBox.IsVisible = true;
-        await popup.NavigateBack();
+        await NavigateBack();
     }
 
     public void ChangeDialog(object? sender, TappedEventArgs eventArgs)
     {
-        if (popup.CurrentContent == _yearsView) return;
+        if (CurrentContent == _yearsView) return;
 
 
-        if(popup.CurrentContent == _monthsView)
+        if(CurrentContent == _monthsView)
         {
             SelectYear(sender, eventArgs);
         }
@@ -101,17 +96,17 @@ public partial class DatePickerDialog : ContentView
 
     public async void SelectMonth(object? sender, TappedEventArgs eventArgs)
     {
-        if (popup.CurrentContent == _monthsView) return;
+        if (CurrentContent == _monthsView) return;
 
         currentMonth.IsVisible = false;
         navBox.IsVisible = false;
-        await popup.NavigateTo(_monthsView);
+        await NavigateTo(_monthsView);
     }
 
     public async void SelectYear(object? sender, TappedEventArgs eventArgs)
     {
-        if (popup.CurrentContent == _yearsView) return;
+        if (CurrentContent == _yearsView) return;
 
-        await popup.NavigateTo(_yearsView);
+        await NavigateTo(_yearsView);
     }
 }

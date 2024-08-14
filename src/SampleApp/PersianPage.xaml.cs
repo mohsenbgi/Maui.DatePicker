@@ -12,6 +12,7 @@ namespace SampleApp
 
             DarkBtn.Clicked += (s, e) => App.Current.UserAppTheme = AppTheme.Dark;
             LightBtn.Clicked += (s, e) => App.Current.UserAppTheme = AppTheme.Light;
+            popupOpener.Clicked += (s, e) => dialog.Open();
         }
     }
 }

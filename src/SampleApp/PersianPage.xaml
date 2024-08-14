@@ -5,10 +5,11 @@
              xmlns:dp="clr-namespace:Maui.DatePicker.Dialogs;assembly=Maui.DatePicker">
 
     <Grid>
-        <dp:DatePickerDialog Language="Persian"/>
-        <VerticalStackLayout TranslationX="200">
-            <Button Text="Light" x:Name="LightBtn" WidthRequest="50"/>
-            <Button Text="Dark"  x:Name="DarkBtn" WidthRequest="50"/>
+        <dp:DatePickerDialog x:Name="dialog" Language="Persian"/>
+        <VerticalStackLayout>
+            <Button Text="OpenCalnedar"  x:Name="popupOpener" WidthRequest="100"/>
+            <Button Text="Light" x:Name="LightBtn" WidthRequest="100"/>
+            <Button Text="Dark"  x:Name="DarkBtn" WidthRequest="100"/>
             <DatePicker WidthRequest="100" HeightRequest="100"/>
         </VerticalStackLayout>
     </Grid>

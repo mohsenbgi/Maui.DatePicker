@@ -1,44 +1,40 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+<local:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Maui.DatePicker.Dialogs.DatePickerDialog"
              x:Name="Self"
              xmlns:local="clr-namespace:Maui.DatePicker"
              xmlns:calendar="clr-namespace:Maui.DatePicker.Calendar"
              xmlns:behavior="clr-namespace:Maui.DatePicker.Behaviors"
-             BindingContext="{x:Reference Self}">
-    <AbsoluteLayout >
-        <Button Text="DatePicker" x:Name="DatePicker" />
-        <local:Popup x:Name="popup" CloseByTappingOutside="True">
-            <local:Popup.Header>
-                <Grid ColumnDefinitions="*,Auto" VerticalOptions="Center" HeightRequest="30" Margin="5,0" FlowDirection="LeftToRight">
-                    <Border StrokeThickness="0" Padding="5">
-                        <Border.StrokeShape>
-                            <RoundRectangle CornerRadius="5" />
-                        </Border.StrokeShape>
-                        <Border.Behaviors>
-                            <behavior:HoverBehavior />
-                        </Border.Behaviors>
-                        <Border.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="ChangeDialog" />
-                        </Border.GestureRecognizers>
-                        <HorizontalStackLayout Grid.Column="0" Spacing="5">
-                            <Label x:Name="currentMonth" FontSize="14" FontFamily="OpenSansSemibold" VerticalTextAlignment="Center"/>
-                            <Label x:Name="currentYear" FontSize="14" FontFamily="OpenSansSemibold" VerticalTextAlignment="Center" />
-                        </HorizontalStackLayout>
-                    </Border>
-                    <HorizontalStackLayout Spacing="10" Grid.Column="2" VerticalOptions="Center" x:Name="navBox">
-                        <ImageButton Clicked="GoToPrevMonth" Source="{FontImageSource FontFamily=MaterialIconsOutlined, Glyph=chevron_left, Color=Black}"  MinimumWidthRequest="25" MinimumHeightRequest="25" WidthRequest="25" HeightRequest="25" x:Name="leftMonth"/>
-                        <ImageButton Clicked="GoToNextMonth" Source="{FontImageSource FontFamily=MaterialIconsOutlined, Glyph=chevron_right, Color=Black}" MinimumWidthRequest="25" MinimumHeightRequest="25" WidthRequest="25" HeightRequest="25"  x:Name="rightMonth"/>
-                    </HorizontalStackLayout>
-                </Grid>
-            </local:Popup.Header>
-            <local:Popup.Footer>
-                <HorizontalStackLayout Spacing="10" HorizontalOptions="End">
-                    <Button Text="Cancell" />
-                    <Button Text="Ok"/>
+             BindingContext="{x:Reference Self}"
+             CloseByTappingOutside="True">
+    <local:Popup.Header>
+        <Grid ColumnDefinitions="*,Auto" VerticalOptions="Center" HeightRequest="30" Margin="5,0" FlowDirection="LeftToRight">
+            <Border StrokeThickness="0" Padding="5">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="5" />
+                </Border.StrokeShape>
+                <Border.Behaviors>
+                    <behavior:HoverBehavior />
+                </Border.Behaviors>
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="ChangeDialog" />
+                </Border.GestureRecognizers>
+                <HorizontalStackLayout Grid.Column="0" Spacing="5">
+                    <Label x:Name="currentMonth" FontSize="14" FontFamily="OpenSansSemibold" VerticalTextAlignment="Center"/>
+                    <Label x:Name="currentYear" FontSize="14" FontFamily="OpenSansSemibold" VerticalTextAlignment="Center" />
                 </HorizontalStackLayout>
-            </local:Popup.Footer>
-        </local:Popup>
-    </AbsoluteLayout>
-</ContentView>
+            </Border>
+            <HorizontalStackLayout Spacing="10" Grid.Column="2" VerticalOptions="Center" x:Name="navBox">
+                <ImageButton Clicked="GoToPrevMonth" Source="{FontImageSource FontFamily=MaterialIconsOutlined, Glyph=chevron_left, Color=Black}"  MinimumWidthRequest="25" MinimumHeightRequest="25" WidthRequest="25" HeightRequest="25" x:Name="leftMonth"/>
+                <ImageButton Clicked="GoToNextMonth" Source="{FontImageSource FontFamily=MaterialIconsOutlined, Glyph=chevron_right, Color=Black}" MinimumWidthRequest="25" MinimumHeightRequest="25" WidthRequest="25" HeightRequest="25"  x:Name="rightMonth"/>
+            </HorizontalStackLayout>
+        </Grid>
+    </local:Popup.Header>
+    <local:Popup.Footer>
+        <HorizontalStackLayout Spacing="10" HorizontalOptions="End">
+            <Button Text="Cancell" />
+            <Button Text="Ok"/>
+        </HorizontalStackLayout>
+    </local:Popup.Footer>
+</local:Popup>
