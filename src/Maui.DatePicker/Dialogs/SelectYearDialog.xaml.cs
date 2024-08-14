@@ -32,9 +32,9 @@ public partial class SelectYearDialog : CollectionView
         SelectedYear = Config.Language.GetCalendar().GetYear(DateTime.Now).ToString();
 
         #if WINDOWS
-            Loaded += (s, e) => ScrollTo(YearsDataItems.IndexOf(SelectedYear), position: ScrollToPosition.Center, animate: false);
+            Loaded += (s, e) => ScrollTo(YearsDataItems.IndexOf(SelectedYear), position: ScrollToPosition.Start, animate: false);
         #else
-            Loaded += (s, e) => ScrollTo(SelectedYear, null, ScrollToPosition.Center, false);
+            Loaded += (s, e) => ScrollTo(SelectedYear, null, ScrollToPosition.Start, false);
         #endif
 
     }
@@ -43,10 +43,5 @@ public partial class SelectYearDialog : CollectionView
     {
         SelectedYear = ((Label)((Border)sender).Content).Text;
         YearSelected?.Invoke(sender, int.Parse(SelectedYear));
-    }
-
-    protected override void OnSizeAllocated(double width, double height)
-    {
-        base.OnSizeAllocated(width, height);
     }
 }

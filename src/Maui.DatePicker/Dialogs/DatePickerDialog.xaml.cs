@@ -74,9 +74,9 @@ public partial class DatePickerDialog : Popup
         var cal = Config.Language.GetCalendar();
         var expectedDate = new DateTime(int.Parse(currentYear.Text), selectedMonth, cal.GetDayOfMonth(currentDate), cal);
         _calendar.GoToDate(expectedDate);
+        await NavigateBack();
         currentMonth.IsVisible = true;
         navBox.IsVisible = true;
-        await NavigateBack();
     }
 
     public void ChangeDialog(object? sender, TappedEventArgs eventArgs)

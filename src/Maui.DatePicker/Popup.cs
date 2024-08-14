@@ -145,6 +145,7 @@ public partial class Popup : ContentView
         contentGrid.Remove(_header);
 
         _header = newView;
+        _header.ZIndex = 1;
         
         Grid.SetRow(_header, 0);
         contentGrid.Add(_header);
@@ -158,6 +159,7 @@ public partial class Popup : ContentView
         contentGrid.Remove(_footer);
 
         _footer = newView;
+        _footer.ZIndex = 1;
 
         Grid.SetRow(_footer, 2);
         contentGrid.Add(_footer);
@@ -176,12 +178,14 @@ public partial class Popup : ContentView
         var contentGrid = (Grid)_contentPresenter.Content;
 
         view.Opacity = 0;
+        view.Scale = 1.5;
         Grid.SetRow(view, 1);
         contentGrid.Add(view);
 
+        currentView.Opacity = 0;
         await Task.WhenAll(
                 view.OpacityTo(0, 1),
-                currentView.OpacityTo(1, 0));
+                view.ScaleTo(1));
 
         contentGrid.Remove(currentView);
 
@@ -196,9 +200,11 @@ public partial class Popup : ContentView
 
         contentGrid.Add(toShowView);
 
+        poppedView.Opacity = 0;
+        toShowView.Scale = 0.5;
         await Task.WhenAll(
                 toShowView.OpacityTo(0, 1),
-                poppedView.OpacityTo(1, 0));
+                toShowView.ScaleTo(1));
 
         contentGrid.Remove(poppedView);
     }

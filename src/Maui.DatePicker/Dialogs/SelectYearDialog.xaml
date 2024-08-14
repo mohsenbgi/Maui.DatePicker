@@ -5,7 +5,8 @@
              x:Name="Self"
              xmlns:behavior="clr-namespace:Maui.DatePicker.Behaviors"
              BindingContext="{x:Reference Self}"
-             ItemsSource="{Binding YearsDataItems}">
+             ItemsSource="{Binding YearsDataItems}"
+             VerticalScrollBarVisibility="Never">
     <CollectionView.ItemTemplate>
         <DataTemplate>
             <Border StrokeThickness="0"
