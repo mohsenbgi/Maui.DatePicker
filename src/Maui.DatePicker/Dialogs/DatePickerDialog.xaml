@@ -4,6 +4,7 @@
              x:Class="Maui.DatePicker.Dialogs.DatePickerDialog"
              x:Name="Self"
              xmlns:local="clr-namespace:Maui.DatePicker"
+             xmlns:controls="clr-namespace:Maui.DatePicker.Controls"
              xmlns:calendar="clr-namespace:Maui.DatePicker.Calendar"
              xmlns:behavior="clr-namespace:Maui.DatePicker.Behaviors"
              BindingContext="{x:Reference Self}"
@@ -25,16 +26,19 @@
                     <Label x:Name="currentYear" FontSize="15" VerticalTextAlignment="Center" />
                 </HorizontalStackLayout>
             </Border>
-            <HorizontalStackLayout Spacing="10" Grid.Column="2" VerticalOptions="Center" x:Name="navBox">
-                <ImageButton Clicked="GoToPrevMonth" Source="{FontImageSource FontFamily=MaterialIconsOutlined, Glyph=chevron_left, Color=Black}"  MinimumWidthRequest="25" MinimumHeightRequest="25" WidthRequest="25" HeightRequest="25" x:Name="leftMonth"/>
-                <ImageButton Clicked="GoToNextMonth" Source="{FontImageSource FontFamily=MaterialIconsOutlined, Glyph=chevron_right, Color=Black}" MinimumWidthRequest="25" MinimumHeightRequest="25" WidthRequest="25" HeightRequest="25"  x:Name="rightMonth"/>
+            <HorizontalStackLayout Spacing="5" Grid.Column="2" VerticalOptions="Center" x:Name="navBox" Padding="0,0,5,0">
+                <controls:ArrowButton Clicked="GoToPrevMonth" FlowDirection="RightToLeft" x:Name="leftMonth"/>
+                <controls:ArrowButton Clicked="GoToNextMonth" FlowDirection="LeftToRight" x:Name="rightMonth"/>
             </HorizontalStackLayout>
         </Grid>
     </local:Popup.Header>
     <local:Popup.Footer>
+        <VerticalStackLayout>
+            <controls:Divider BackgroundColor="Gray"/>
         <HorizontalStackLayout Spacing="10" HorizontalOptions="End">
             <Button Text="Cancell" />
             <Button Text="Ok"/>
         </HorizontalStackLayout>
+        </VerticalStackLayout>
     </local:Popup.Footer>
 </local:Popup>
