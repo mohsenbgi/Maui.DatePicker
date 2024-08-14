@@ -74,7 +74,6 @@
             <Setter Property="WidthRequest" Value="25"/>
             <Setter Property="HeightRequest" Value="25"/>
             <Setter Property="FontSize" Value="13"/>
-            <!--<Setter Property="FontFamily" Value="OpenSansSemibold" />-->
             <Style.Triggers>
                 <DataTrigger TargetType="controls:DayTitleView" Binding="{Binding Source={RelativeSource AncestorType={x:Type controls:DayView}}, Path=IsToday}" Value="True">
                     <Setter Property="TextColor" Value="{StaticResource Primary}"/>
