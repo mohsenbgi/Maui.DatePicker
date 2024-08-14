@@ -9,7 +9,7 @@
              BindingContext="{x:Reference Self}"
              CloseByTappingOutside="True">
     <local:Popup.Header>
-        <Grid ColumnDefinitions="*,Auto" VerticalOptions="Center" HeightRequest="30" Margin="5,0" FlowDirection="LeftToRight">
+        <Grid ColumnDefinitions="*,Auto" VerticalOptions="Center" HeightRequest="35" FlowDirection="LeftToRight">
             <Border StrokeThickness="0" Padding="5">
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="5" />

@@ -214,10 +214,18 @@ public partial class Calendar : Grid
             }
             #endif
 
-            _activeMonth.TranslationX += toApplyXDiff;
+            _activeMonth.TranslationX = Math.Clamp(_activeMonth.TranslationX + toApplyXDiff, minimumX, maximumX);
 
-            if (_appliedTotalXDiff > 0) _leftMonth.TranslationX += toApplyXDiff;
-            else _rightMonth.TranslationX += toApplyXDiff;
+            if (Config.Language.IsRightToLeft() && DeviceInfo.Current.Platform == DevicePlatform.WinUI)
+            {
+                _leftMonth.TranslationX = _activeMonth.TranslationX + Width;
+                _rightMonth.TranslationX = _activeMonth.TranslationX - Width;
+            }
+            else
+            {
+                _leftMonth.TranslationX = _activeMonth.TranslationX - Width;
+                _rightMonth.TranslationX = _activeMonth.TranslationX + Width;
+            }
 
             #if WINDOWS
             if (Config.Language.IsRightToLeft())

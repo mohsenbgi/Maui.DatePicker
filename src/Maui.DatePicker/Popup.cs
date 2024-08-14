@@ -256,7 +256,7 @@ public class PopupContentPresenter : Border
     {
         StrokeThickness = 0;
         BackgroundColor = Colors.White;
-        Padding = new Thickness(0, 5);
+        Padding = new Thickness(5, 5);
         VerticalOptions = LayoutOptions.Center;
         HorizontalOptions = LayoutOptions.Center;
         StrokeShape = new RoundRectangle

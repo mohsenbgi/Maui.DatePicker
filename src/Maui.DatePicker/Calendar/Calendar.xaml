@@ -17,10 +17,7 @@
         </Style>
 
         <Style TargetType="controls:MonthView">
-            <Setter Property="AbsoluteLayout.LayoutFlags" Value="SizeProportional"/>
-            <Setter Property="AbsoluteLayout.LayoutBounds" Value="0,0,1,1"/>
             <Setter Property="HeightRequest" Value="{StaticResource MonthHeight}"/>
-            <Setter Property="HorizontalOptions" Value="Fill"/>
             <Setter Property="FlowDirection" Value="{DynamicResource GlobalFlowDirection}"/>
             <Setter Property="IsClippedToBounds" Value="True" />
             <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource CalendarGenericLightBackgroundColor}}"/>
@@ -28,7 +25,6 @@
         </Style>
 
         <Style TargetType="AbsoluteLayout" x:Key="MonthContainer">
-            <Setter Property="HorizontalOptions" Value="Fill"/>
             <Setter Property="HeightRequest" Value="{StaticResource MonthHeight}"/>
             <Setter Property="IsClippedToBounds" Value="True"/>
 
@@ -36,18 +32,16 @@
         </Style>
 
         <Style TargetType="HorizontalStackLayout" x:Key="WeekDays">
-            <Setter Property="AbsoluteLayout.LayoutFlags" Value="SizeProportional"/>
-            <Setter Property="AbsoluteLayout.LayoutBounds" Value="0,0,1,1"/>
             <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource CalendarGenericLightBackgroundColor}}"/>
-            <Setter Property="HorizontalOptions" Value="Center" />
             <Setter Property="FlowDirection" Value="{DynamicResource GlobalFlowDirection}" />
             <Setter Property="HeightRequest" Value="25"/>
+            <Setter Property="Spacing" Value="5"/>
         </Style>
 
         <Style TargetType="Label" x:Key="WeekDay">
             <Setter Property="TextColor" Value="{StaticResource Gray600}" />
             <Setter Property="FontSize" Value="12" />
-            <Setter Property="WidthRequest" Value="40"/>
+            <Setter Property="WidthRequest" Value="35"/>
             <Setter Property="HeightRequest" Value="25"/>
             <Setter Property="HorizontalTextAlignment" Value="Center" />
             <Setter Property="HorizontalOptions" Value="Center" />
@@ -79,7 +73,7 @@
             <Setter Property="TextColor" Value="Black"/>
             <Setter Property="WidthRequest" Value="25"/>
             <Setter Property="HeightRequest" Value="25"/>
-            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontSize" Value="13"/>
             <!--<Setter Property="FontFamily" Value="OpenSansSemibold" />-->
             <Style.Triggers>
                 <DataTrigger TargetType="controls:DayTitleView" Binding="{Binding Source={RelativeSource AncestorType={x:Type controls:DayView}}, Path=IsToday}" Value="True">

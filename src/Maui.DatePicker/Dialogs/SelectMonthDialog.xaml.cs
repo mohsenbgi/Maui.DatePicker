@@ -11,6 +11,7 @@ public partial class SelectMonthDialog : Grid
     Dictionary<string,int> monthNumbers = new Dictionary<string,int>();
     public SelectMonthDialog(List<string> months)
     {
+        VerticalOptions = LayoutOptions.Fill;
         RowDefinitions = new RowDefinitionCollection
         (
             new RowDefinition(GridLength.Star),
