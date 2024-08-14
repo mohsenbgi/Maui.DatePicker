@@ -261,7 +261,7 @@ public class PopupContentPresenter : Border
         HorizontalOptions = LayoutOptions.Center;
         StrokeShape = new RoundRectangle
         {
-            CornerRadius = new CornerRadius(10, 10, 10, 10)
+            CornerRadius = new CornerRadius(8)
         };
         Content = new Grid
         {

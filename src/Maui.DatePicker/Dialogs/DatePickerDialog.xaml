@@ -21,8 +21,8 @@
                     <TapGestureRecognizer Tapped="ChangeDialog" />
                 </Border.GestureRecognizers>
                 <HorizontalStackLayout Grid.Column="0" Spacing="5">
-                    <Label x:Name="currentMonth" FontSize="14" VerticalTextAlignment="Center"/>
-                    <Label x:Name="currentYear" FontSize="14" VerticalTextAlignment="Center" />
+                    <Label x:Name="currentMonth" FontSize="15" VerticalTextAlignment="Center"/>
+                    <Label x:Name="currentYear" FontSize="15" VerticalTextAlignment="Center" />
                 </HorizontalStackLayout>
             </Border>
             <HorizontalStackLayout Spacing="10" Grid.Column="2" VerticalOptions="Center" x:Name="navBox">
