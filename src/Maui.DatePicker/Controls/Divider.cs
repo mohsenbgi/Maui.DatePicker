@@ -6,7 +6,7 @@ public class Divider : GraphicsView, IDrawable
     public Divider()
     {
         Drawable = this;
-        HeightRequest = 5;
+        HeightRequest = 1;
         this.ParentChanged += OnParentChanged;
     }
 
@@ -19,7 +19,7 @@ public class Divider : GraphicsView, IDrawable
     {
         canvas.SaveState();
 
-        canvas.StrokeSize = 2;
+        canvas.StrokeSize = 1;
         canvas.StrokeColor = BackgroundColor;
 
         canvas.DrawLine(dirtyRect.X, dirtyRect.Y, dirtyRect.X + dirtyRect.Width, dirtyRect.Y);

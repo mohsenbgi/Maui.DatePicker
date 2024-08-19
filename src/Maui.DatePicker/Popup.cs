@@ -1,12 +1,8 @@
 using Maui.DatePicker.Animations;
-using Maui.DatePicker.Extensions;
-using Microsoft.Maui.Controls;
+using Maui.DatePicker.Controls;
 using Microsoft.Maui.Controls.Shapes;
 using Microsoft.Maui.Layouts;
 using System.ComponentModel;
-using System.Globalization;
-using System.Reflection;
-using System.Runtime.Serialization;
 
 namespace Maui.DatePicker;
 [ContentProperty(nameof(Content))]
@@ -14,6 +10,9 @@ public partial class Popup : ContentView
 {
     public static new readonly BindableProperty ContentProperty = BindableProperty.Create(nameof(Content), typeof(View), typeof(Popup),
         propertyChanged: (bindable, oldValue, newValue) => ((Popup)bindable).OnContentChanged((View)oldValue, (View)newValue));
+
+    public static new readonly BindableProperty PaddingProperty = BindableProperty.Create(nameof(Padding), typeof(Thickness), typeof(Popup),
+        propertyChanged: (bindable, oldValue, newValue) => ((Popup)bindable).OnPaddingChanged((Thickness)oldValue, (Thickness)newValue));
 
     public static readonly BindableProperty HeaderProperty = BindableProperty.Create(nameof(Header), typeof(View), typeof(Popup),
         propertyChanged: (bindable, oldValue, newValue) => ((Popup)bindable).OnHeaderChanged((View)oldValue, (View)newValue));
@@ -27,9 +26,27 @@ public partial class Popup : ContentView
     public static readonly BindableProperty BackdropColorProperty = BindableProperty.Create(nameof(BackdropColor), typeof(Color), typeof(Popup), Color.FromArgb("#000"),
         propertyChanged: (bindable, oldValue, newValue) => ((Popup)bindable).OnBackdropColorChanged((Color)oldValue, (Color)newValue));
 
-    public static readonly BindableProperty CloseByTappingOutsideProperty = BindableProperty.Create(nameof(OnTapped), typeof(bool), typeof(Popup), false);
+    public static readonly BindableProperty CloseByTappingOutsideProperty = BindableProperty.Create(nameof(CloseByTappingOutside), typeof(bool), typeof(Popup), false);
 
-    public View Header 
+    public static readonly BindableProperty HeaderHasDividerProperty = BindableProperty.Create(nameof(HeaderHasDivider), typeof(bool), typeof(Popup), false,
+        propertyChanged: (bindable, oldValue, newValue) => ((Popup)bindable).OnHeaderHasDividerChanged((bool)newValue));
+
+    public static readonly BindableProperty FooterHasDividerProperty = BindableProperty.Create(nameof(FooterHasDivider), typeof(bool), typeof(Popup), false,
+        propertyChanged: (bindable, oldValue, newValue) => ((Popup)bindable).OnFooterHasDividerChanged((bool)newValue));
+
+    public bool HeaderHasDivider
+    {
+        get => (bool)GetValue(HeaderHasDividerProperty);
+        set => SetValue(HeaderHasDividerProperty, value);
+    }
+
+    public bool FooterHasDivider 
+    {
+        get => (bool)GetValue(FooterHasDividerProperty);
+        set => SetValue(FooterHasDividerProperty, value);
+    }
+
+    public View Header
     {
         get => (View)GetValue(HeaderProperty);
         set => SetValue(HeaderProperty, value);
@@ -45,6 +62,12 @@ public partial class Popup : ContentView
     {
         get => (View)GetValue(ContentProperty);
         set => SetValue(ContentProperty, value);
+    }
+
+    public new Thickness Padding
+    {
+        get => (Thickness)GetValue(PaddingProperty);
+        set => SetValue(PaddingProperty, value);
     }
 
     public float BackdropOpacity
@@ -67,10 +90,7 @@ public partial class Popup : ContentView
 
     public View CurrentContent => _contentViews.Peek();
 
-    readonly Border _contentPresenter;
-    View _content;
-    View _header;
-    View _footer;
+    readonly PopupContentPresenter _contentPresenter;
     bool _backdropColorIsChanging;
     bool _backgroundColorIsChanging;
     double _minimumTranslationY = 0;
@@ -82,6 +102,7 @@ public partial class Popup : ContentView
     {
         HorizontalOptions = LayoutOptions.Fill;
         VerticalOptions = LayoutOptions.Fill;
+        Padding = new Thickness(5, 5);
         Opacity = 0;
         ZIndex = 2;
         InputTransparent = true;
@@ -121,48 +142,83 @@ public partial class Popup : ContentView
             OnBackgroundColorChanged();
     }
 
+    private void OnPaddingChanged(Thickness oldValue, Thickness newValue)
+    {
+        if (_contentPresenter is null) return;
+
+        double left = newValue.Left - oldValue.Left;
+        double top = newValue.Top - oldValue.Top;
+        double right = oldValue.Right - newValue.Right;
+        double bottom = oldValue.Bottom - newValue.Bottom;
+
+        if (_contentPresenter.Content is not null)
+        {
+            _contentPresenter.Content.Margin = new Thickness(
+                                                            _contentPresenter.Content.Margin.Left + left,
+                                                            _contentPresenter.Content.Margin.Top,
+                                                            _contentPresenter.Content.Margin.Right + right,
+                                                            _contentPresenter.Content.Margin.Bottom);
+        }
+
+        if (_contentPresenter.Header is not null)
+        {
+            _contentPresenter.Header.Margin = new Thickness(
+                                                            _contentPresenter.Header.Margin.Left + left,
+                                                            _contentPresenter.Header.Margin.Top + top,
+                                                            _contentPresenter.Header.Margin.Right + right,
+                                                            _contentPresenter.Header.Margin.Bottom);
+        }
+
+        if (_contentPresenter.Footer is not null)
+        {
+            _contentPresenter.Footer.Margin = new Thickness(
+                                                            _contentPresenter.Footer.Margin.Left + left,
+                                                            _contentPresenter.Footer.Margin.Top,
+                                                            _contentPresenter.Footer.Margin.Right + right,
+                                                            _contentPresenter.Footer.Margin.Bottom + bottom);
+        }
+    }
+
+    private void OnHeaderHasDividerChanged(bool hasDivider)
+    {
+        if (hasDivider) _contentPresenter.ShowHeaderDivider();
+        else _contentPresenter.HideHeaderDivider();
+    }
+
+    private void OnFooterHasDividerChanged(bool hasDivider)
+    {
+        if (hasDivider) _contentPresenter.ShowFooterDivider();
+        else _contentPresenter.HideFooterDivider();
+    }
+
     private void OnContentChanged(View oldView, View newView)
     {
         if (newView is null) return;
 
-        var contentGrid = (Grid)_contentPresenter.Content;
-        contentGrid.Remove(_content);
-        
-        _content = newView;
-        
-        Grid.SetRow(_content, 1);
-        contentGrid.Add(_content);
-        
+        newView.Margin = new Thickness(newView.Margin.Left + Padding.Left, newView.Margin.Top, newView.Margin.Right + Padding.Right, newView.Margin.Bottom);
+
+        _contentPresenter.SetContent(newView);
+
         _contentViews.Clear();
-        _contentViews.Push(_content);
+        _contentViews.Push(newView);
     }
 
     private void OnHeaderChanged(View oldView, View newView)
     {
         if (newView is null) return;
 
-        var contentGrid = (Grid)_contentPresenter.Content;
-        contentGrid.Remove(_header);
+        newView.Margin = new Thickness(newView.Margin.Left + Padding.Left, newView.Margin.Top + Padding.Top, newView.Margin.Right + Padding.Right, newView.Margin.Bottom);
 
-        _header = newView;
-        _header.ZIndex = 1;
-        
-        Grid.SetRow(_header, 0);
-        contentGrid.Add(_header);
+        _contentPresenter.SetHeader(newView);
     }
 
     private void OnFooterChanged(View oldView, View newView)
     {
         if (newView is null) return;
 
-        var contentGrid = (Grid)_contentPresenter.Content;
-        contentGrid.Remove(_footer);
+        newView.Margin = new Thickness(newView.Margin.Left + Padding.Left, newView.Margin.Top, newView.Margin.Right + Padding.Right, newView.Margin.Bottom + Padding.Bottom);
 
-        _footer = newView;
-        _footer.ZIndex = 1;
-
-        Grid.SetRow(_footer, 2);
-        contentGrid.Add(_footer);
+        _contentPresenter.SetFooter(newView);
     }
 
     public async Task NavigateTo(View view)
@@ -175,20 +231,17 @@ public partial class Popup : ContentView
 
         _contentViews.Push(view);
 
-        var contentGrid = (Grid)_contentPresenter.Content;
-
         view.Opacity = 0;
         view.Scale = 1.5;
-        Grid.SetRow(view, 1);
-        contentGrid.Add(view);
+
+        _contentPresenter.AddContent(view);
 
         currentView.Opacity = 0;
         await Task.WhenAll(
                 view.OpacityTo(0, 1),
                 view.ScaleTo(1));
 
-        contentGrid.Remove(currentView);
-
+        _contentPresenter.Remove(currentView);
     }
 
     public async Task NavigateBack()
@@ -196,9 +249,7 @@ public partial class Popup : ContentView
         var poppedView = _contentViews.Pop();
         var toShowView = _contentViews.Peek();
 
-        var contentGrid = (Grid)_contentPresenter.Content;
-
-        contentGrid.Add(toShowView);
+        _contentPresenter.AddContent(toShowView);
 
         poppedView.Opacity = 0;
         toShowView.Scale = 0.5;
@@ -206,7 +257,7 @@ public partial class Popup : ContentView
                 toShowView.OpacityTo(0, 1),
                 toShowView.ScaleTo(1));
 
-        contentGrid.Remove(poppedView);
+        _contentPresenter.Remove(poppedView);
     }
 
     private void OnBackdropColorChanged(Color oldColor, Color newColor)
@@ -253,38 +304,5 @@ public partial class Popup : ContentView
         IsVisible = false;
         InputTransparent = true;
     }
-}
 
-public class PopupContentPresenter : Border 
-{
-    SizeRequest? _size;
-    public PopupContentPresenter()
-    {
-        StrokeThickness = 0;
-        BackgroundColor = Colors.White;
-        Padding = new Thickness(5, 5);
-        VerticalOptions = LayoutOptions.Center;
-        HorizontalOptions = LayoutOptions.Center;
-        StrokeShape = new RoundRectangle
-        {
-            CornerRadius = new CornerRadius(8)
-        };
-        Content = new Grid
-        {
-            RowDefinitions = new RowDefinitionCollection(
-                                    new RowDefinition(GridLength.Auto),
-                                    new RowDefinition(GridLength.Star),
-                                    new RowDefinition(GridLength.Auto)),
-        };
-    }
-
-    protected override Size MeasureOverride(double widthConstraint, double heightConstraint)
-    {
-        var sizeRequest = base.MeasureOverride(widthConstraint, heightConstraint);
-
-        if (_size is not null) return _size.Value;
-
-        _size = sizeRequest;
-        return sizeRequest;
-    }
 }

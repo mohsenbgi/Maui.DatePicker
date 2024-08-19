@@ -8,7 +8,8 @@
              xmlns:calendar="clr-namespace:Maui.DatePicker.Calendar"
              xmlns:behavior="clr-namespace:Maui.DatePicker.Behaviors"
              BindingContext="{x:Reference Self}"
-             CloseByTappingOutside="True">
+             CloseByTappingOutside="True"
+             FooterHasDivider="True">
     <local:Popup.Header>
         <Grid ColumnDefinitions="*,Auto" VerticalOptions="Center" HeightRequest="35" FlowDirection="LeftToRight">
             <Border StrokeThickness="0" Padding="5">
@@ -26,19 +27,16 @@
                     <Label x:Name="currentYear" FontSize="15" VerticalTextAlignment="Center" />
                 </HorizontalStackLayout>
             </Border>
-            <HorizontalStackLayout Spacing="5" Grid.Column="2" VerticalOptions="Center" x:Name="navBox" Padding="0,0,5,0">
+            <HorizontalStackLayout Spacing="5" Grid.Column="2" VerticalOptions="Center" x:Name="navBox">
                 <controls:ArrowButton Clicked="GoToPrevMonth" FlowDirection="RightToLeft" x:Name="leftMonth"/>
                 <controls:ArrowButton Clicked="GoToNextMonth" FlowDirection="LeftToRight" x:Name="rightMonth"/>
             </HorizontalStackLayout>
         </Grid>
     </local:Popup.Header>
     <local:Popup.Footer>
-        <VerticalStackLayout>
-            <controls:Divider BackgroundColor="Gray"/>
-        <HorizontalStackLayout Spacing="10" HorizontalOptions="End">
-            <Button Text="Cancell" />
-            <Button Text="Ok"/>
+        <HorizontalStackLayout Spacing="10" Margin="0,5,0,0" HorizontalOptions="End">
+            <Button BackgroundColor="White" TextColor="Black" Text="Cancell" />
+            <Button BackgroundColor="White" TextColor="Black" Text="Ok" />
         </HorizontalStackLayout>
-        </VerticalStackLayout>
     </local:Popup.Footer>
 </local:Popup>

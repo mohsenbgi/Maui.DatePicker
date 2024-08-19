@@ -39,14 +39,6 @@ namespace Maui.DatePicker.Behaviors
             base.OnAttachedTo(bindable);
         }
 
-        private void OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
-        {
-            if (!_bgChanging && e.PropertyName == VisualElement.BackgroundColorProperty.PropertyName)
-            {
-                _originBackgroundColor = ((VisualElement)sender).BackgroundColor;
-            }
-        }
-
         protected override void OnDetachingFrom(VisualElement bindable)
         {
             if (bindable is IGestureRecognizers gestures)
@@ -55,6 +47,14 @@ namespace Maui.DatePicker.Behaviors
                 gestures.GestureRecognizers.Remove(_tapGestureRecognizer);
             }
             base.OnDetachingFrom(bindable);
+        }
+
+        private void OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (!_bgChanging && e.PropertyName == VisualElement.BackgroundColorProperty.PropertyName)
+            {
+                _originBackgroundColor = ((VisualElement)sender).BackgroundColor;
+            }
         }
 
         async void OnTapped(object? sender, TappedEventArgs eventArgs)
@@ -79,7 +79,7 @@ namespace Maui.DatePicker.Behaviors
             var cancelled = await element.ColorTo(lastBgColor,
                                                new Color(lastBgColor.Red - .04f, lastBgColor.Green - .04f, lastBgColor.Blue - .04f),
                                                v => element.BackgroundColor = v,
-                                               100);
+                                               200);
             if (!cancelled)
             {
                 await element.ColorTo(element.BackgroundColor,
