@@ -53,10 +53,12 @@ public class DayView : Border, IDayView
            propertyChanged: (bindable, oldValue, newValue) => ((DayView)bindable).OnIsSelectedChanged((bool)oldValue, (bool)newValue));
 
     public static BindableProperty IsTodayProperty
-        = BindableProperty.Create(nameof(IsToday), typeof(bool), typeof(DayView), false);
+        = BindableProperty.Create(nameof(IsToday), typeof(bool), typeof(DayView), false,
+            propertyChanged: OnIsTodayChanged);
 
     public static BindableProperty IsDisabledProperty
-        = BindableProperty.Create(nameof(IsDisable), typeof(bool), typeof(DayView), false);
+        = BindableProperty.Create(nameof(IsDisable), typeof(bool), typeof(DayView), false,
+            propertyChanged: OnIsDisabledChanged);
 
     public static BindableProperty DateTimeProperty
         = BindableProperty.Create(nameof(DateTime), typeof(DateTime), typeof(DayView), default);
@@ -100,6 +102,36 @@ public class DayView : Border, IDayView
         {
             Tapped?.Invoke(sender, e);
         }
+    }
+
+    private void GenerateTextColor()
+    {
+        Color color;
+
+        if (IsDisable) color = Colors.Transparent;
+        else
+        {
+            if (IsToday)
+            {
+                color = Application.Current?.RequestedTheme == AppTheme.Light ? Color.FromArgb("#e67207") : Color.FromArgb("#faa95c");
+            }
+            else
+            {
+                color = Application.Current?.RequestedTheme == AppTheme.Light ? Colors.Black : Colors.White;
+            }
+        }
+
+        Title.TextColor = color;
+    }
+
+    private static void OnIsTodayChanged(BindableObject bindable, object oldValue, object newValue)
+    {
+        ((DayView)bindable).GenerateTextColor();
+    }
+
+    private static void OnIsDisabledChanged(BindableObject bindable, object oldValue, object newValue)
+    {
+        ((DayView)bindable).GenerateTextColor();
     }
 
     void PointerEntered(object? sender, PointerEventArgs eventArgs)

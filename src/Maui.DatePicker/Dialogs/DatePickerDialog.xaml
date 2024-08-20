@@ -39,17 +39,24 @@
         </Grid>
     </local:Popup.Header>
     <local:Popup.Footer>
-        <HorizontalStackLayout Spacing="5" Margin="0,5,0,0" HorizontalOptions="End" >
-            <Button Clicked="CancelButtonClicked" BackgroundColor="{AppThemeBinding Light={StaticResource CalendarGenericLightBackgroundColor}, Dark={StaticResource CalendarGenericDarkBackgroundColor}}" TextColor="{AppThemeBinding Light=Black, Dark=White}" FontSize="13" Text="Cancel" x:Name="cancelButton">
+        <Grid FlowDirection="LeftToRight" ColumnDefinitions="auto,*" Margin="0,5,0,0">
+            <Button Grid.Column="0" Clicked="TodayButtonClicked" BackgroundColor="{AppThemeBinding Light={StaticResource CalendarGenericLightBackgroundColor}, Dark={StaticResource CalendarGenericDarkBackgroundColor}}" TextColor="{AppThemeBinding Light=Black, Dark=White}" FontSize="13" Text="Today" x:Name="todayButton">
                 <Button.Behaviors>
                     <behavior:HoverBehavior />
                 </Button.Behaviors>
             </Button>
-            <Button Clicked="OkButtonClicked" BackgroundColor="{AppThemeBinding Light={StaticResource CalendarGenericLightBackgroundColor}, Dark={StaticResource CalendarGenericDarkBackgroundColor}}" TextColor="{AppThemeBinding Light=Black, Dark=White}" FontSize="13" Text="Ok" x:Name="okButton">
-                <Button.Behaviors>
-                    <behavior:HoverBehavior />
-                </Button.Behaviors>
-            </Button>
-        </HorizontalStackLayout>
+            <HorizontalStackLayout Grid.Column="1" Spacing="5" HorizontalOptions="End">
+                <Button Clicked="CancelButtonClicked" BackgroundColor="{AppThemeBinding Light={StaticResource CalendarGenericLightBackgroundColor}, Dark={StaticResource CalendarGenericDarkBackgroundColor}}" TextColor="{AppThemeBinding Light=Black, Dark=White}" FontSize="13" Text="Cancel" x:Name="cancelButton">
+                    <Button.Behaviors>
+                        <behavior:HoverBehavior />
+                    </Button.Behaviors>
+                </Button>
+                <Button Clicked="OkButtonClicked" BackgroundColor="{AppThemeBinding Light={StaticResource CalendarGenericLightBackgroundColor}, Dark={StaticResource CalendarGenericDarkBackgroundColor}}" TextColor="{AppThemeBinding Light=Black, Dark=White}" FontSize="13" Text="Ok" x:Name="okButton">
+                    <Button.Behaviors>
+                        <behavior:HoverBehavior />
+                    </Button.Behaviors>
+                </Button>
+            </HorizontalStackLayout>
+        </Grid>
     </local:Popup.Footer>
 </local:Popup>

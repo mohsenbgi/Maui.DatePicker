@@ -36,6 +36,7 @@ public partial class DatePickerDialog : Popup
 
         okButton.Text = Constants.Resources.GetStringValue(Constants.Resources.Ok);
         cancelButton.Text = Constants.Resources.GetStringValue(Constants.Resources.Cancel);
+        todayButton.Text = Constants.Resources.GetStringValue(Constants.Resources.Today);
 
         _calendar = new Calendar.Calendar();
         _calendar.ActiveMonthChanged += MonthChanged;
@@ -80,6 +81,7 @@ public partial class DatePickerDialog : Popup
         _calendar.GoToDate(expectedDate);
         await NavigateBack();
         currentMonth.IsVisible = true;
+        todayButton.IsVisible = true;
         navBox.IsVisible = true;
     }
 
@@ -103,6 +105,7 @@ public partial class DatePickerDialog : Popup
         if (CurrentContent == _monthsView) return;
 
         currentMonth.IsVisible = false;
+        todayButton.IsVisible = false;
         navBox.IsVisible = false;
         await NavigateTo(_monthsView);
     }
@@ -123,5 +126,10 @@ public partial class DatePickerDialog : Popup
     private void CancelButtonClicked(object sender, System.EventArgs e)
     {
         Close();
+    }
+
+    private void TodayButtonClicked(object sender, System.EventArgs e)
+    {
+        _calendar.GoToday();
     }
 }

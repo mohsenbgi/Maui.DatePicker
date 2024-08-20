@@ -166,6 +166,7 @@ public partial class Calendar : Grid
     public void GoToday()
     {
         ActiveMonth = _todayMonthView;
+        ActiveMonth = _activeMonth;
     }
 
     public void GoToDate(DateTime date)

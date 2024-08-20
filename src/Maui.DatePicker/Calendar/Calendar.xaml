@@ -12,8 +12,7 @@
         <x:Double x:Key="MonthHeight">240</x:Double>
         <Color x:Key="CalendarGenericLightBackgroundColor">White</Color>
         <Color x:Key="CalendarGenericDarkBackgroundColor">#1C1C1C</Color>
-        <Color x:Key="DarkPrimary">#faa95c</Color>
-        <Color x:Key="LightPrimary">#e67207</Color>
+        
 
         <Style TargetType="controls:MonthView">
             <Setter Property="HeightRequest" Value="{StaticResource MonthHeight}"/>
@@ -74,14 +73,6 @@
             <Setter Property="WidthRequest" Value="25"/>
             <Setter Property="HeightRequest" Value="25"/>
             <Setter Property="FontSize" Value="13"/>
-            <Style.Triggers>
-                <DataTrigger TargetType="controls:DayTitleView" Binding="{Binding Source={RelativeSource AncestorType={x:Type controls:DayView}}, Path=IsToday}" Value="True">
-                    <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource LightPrimary}, Dark={StaticResource DarkPrimary}}"/>
-                </DataTrigger>
-                <DataTrigger TargetType="controls:DayTitleView" Binding="{Binding Source={RelativeSource AncestorType={x:Type controls:DayView}}, Path=IsDisable}" Value="True">
-                    <Setter Property="TextColor" Value="Transparent"/>
-                </DataTrigger>
-            </Style.Triggers>
         </Style>
     </Grid.Resources>
     <HorizontalStackLayout Grid.Row="0" Grid.Column="0" Style="{StaticResource WeekDays}" x:Name="weekDays">
