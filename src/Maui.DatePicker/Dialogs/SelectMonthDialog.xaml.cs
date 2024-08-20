@@ -34,7 +34,6 @@ public partial class SelectMonthDialog : Grid
             var monthView = new Border
             {
                 StrokeThickness = 0,
-                BackgroundColor = Colors.White,
                 StrokeShape = new RoundRectangle
                 {
                     CornerRadius = 100

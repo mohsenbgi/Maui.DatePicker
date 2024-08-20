@@ -11,8 +11,7 @@
         <DataTemplate>
             <Border StrokeThickness="0"
                     HeightRequest="55"
-                    WidthRequest="55"
-                    BackgroundColor="White">
+                    WidthRequest="55">
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="100" />
                 </Border.StrokeShape>

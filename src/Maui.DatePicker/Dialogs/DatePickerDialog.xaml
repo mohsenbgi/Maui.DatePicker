@@ -40,12 +40,12 @@
     </local:Popup.Header>
     <local:Popup.Footer>
         <HorizontalStackLayout Spacing="5" Margin="0,5,0,0" HorizontalOptions="End" >
-            <Button BackgroundColor="{AppThemeBinding Light={StaticResource CalendarGenericLightBackgroundColor}, Dark={StaticResource CalendarGenericDarkBackgroundColor}}" TextColor="{AppThemeBinding Light=Black, Dark=White}" FontSize="13" Text="Cancel" x:Name="cancelButton">
+            <Button Clicked="CancelButtonClicked" BackgroundColor="{AppThemeBinding Light={StaticResource CalendarGenericLightBackgroundColor}, Dark={StaticResource CalendarGenericDarkBackgroundColor}}" TextColor="{AppThemeBinding Light=Black, Dark=White}" FontSize="13" Text="Cancel" x:Name="cancelButton">
                 <Button.Behaviors>
                     <behavior:HoverBehavior />
                 </Button.Behaviors>
             </Button>
-            <Button BackgroundColor="{AppThemeBinding Light={StaticResource CalendarGenericLightBackgroundColor}, Dark={StaticResource CalendarGenericDarkBackgroundColor}}" TextColor="{AppThemeBinding Light=Black, Dark=White}" FontSize="13" Text="Ok" x:Name="okButton">
+            <Button Clicked="OkButtonClicked" BackgroundColor="{AppThemeBinding Light={StaticResource CalendarGenericLightBackgroundColor}, Dark={StaticResource CalendarGenericDarkBackgroundColor}}" TextColor="{AppThemeBinding Light=Black, Dark=White}" FontSize="13" Text="Ok" x:Name="okButton">
                 <Button.Behaviors>
                     <behavior:HoverBehavior />
                 </Button.Behaviors>

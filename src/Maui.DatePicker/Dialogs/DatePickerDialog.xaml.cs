@@ -19,6 +19,8 @@ public partial class DatePickerDialog : Popup
         set => SetValue(LanguageProperty, value);
     }
 
+    public EventHandler<DateSelectedEventArgs> DateSelected;
+
     SelectYearDialog _yearsView;
     SelectMonthDialog _monthsView;
     Calendar.Calendar _calendar;
@@ -46,7 +48,6 @@ public partial class DatePickerDialog : Popup
         _monthsView = new SelectMonthDialog(new List<string>(Config.Language.GetCulture().DateTimeFormat.AbbreviatedMonthNames).Take(12).ToList());
         _monthsView.MonthSelected += OnMonthSelected;
         _monthsView.FlowDirection= flowDirection;
-        
     }
 
     public void MonthChanged(object sender, MonthChangedEventArgs eventArgs)
@@ -111,5 +112,16 @@ public partial class DatePickerDialog : Popup
         if (CurrentContent == _yearsView) return;
 
         await NavigateTo(_yearsView);
+    }
+
+    private void OkButtonClicked(object sender, System.EventArgs e)
+    {
+        DateSelected?.Invoke(this, new DateSelectedEventArgs(_calendar.ActiveMonth.SelectedDate));
+        Close();
+    }
+
+    private void CancelButtonClicked(object sender, System.EventArgs e)
+    {
+        Close();
     }
 }

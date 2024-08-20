@@ -8,12 +8,7 @@
     Title="SampleApp">
 
     <ShellContent
-        Title="Persian"
-        ContentTemplate="{DataTemplate local:PersianPage}"
-        Route="PersianPage" />
-    <ShellContent
-        Title="English"
-        ContentTemplate="{DataTemplate local:EnglishPage}"
-        Route="EnglishPage" />
-
+        Title="Calendar page"
+        ContentTemplate="{DataTemplate local:CalendarPage}"
+        Route="CalendarPage" />
 </Shell>
