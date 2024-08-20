@@ -7,6 +7,7 @@
              xmlns:controls="clr-namespace:Maui.DatePicker.Controls"
              xmlns:calendar="clr-namespace:Maui.DatePicker.Calendar"
              xmlns:behavior="clr-namespace:Maui.DatePicker.Behaviors"
+             xmlns:convertors="clr-namespace:Maui.DatePicker.Convertors"
              BindingContext="{x:Reference Self}"
              CloseByTappingOutside="True"
              FooterHasDivider="True">
@@ -34,9 +35,17 @@
         </Grid>
     </local:Popup.Header>
     <local:Popup.Footer>
-        <HorizontalStackLayout Spacing="10" Margin="0,5,0,0" HorizontalOptions="End">
-            <Button BackgroundColor="White" TextColor="Black" Text="Cancell" />
-            <Button BackgroundColor="White" TextColor="Black" Text="Ok" />
+        <HorizontalStackLayout Spacing="5" Margin="0,5,0,0" HorizontalOptions="End">
+            <Button BackgroundColor="White" TextColor="Black" FontSize="13" Text="Cancel" x:Name="cancelButton">
+                <Button.Behaviors>
+                    <behavior:HoverBehavior />
+                </Button.Behaviors>
+            </Button>
+            <Button BackgroundColor="White" TextColor="Black" FontSize="13" Text="Ok" x:Name="okButton">
+                <Button.Behaviors>
+                    <behavior:HoverBehavior />
+                </Button.Behaviors>
+            </Button>
         </HorizontalStackLayout>
     </local:Popup.Footer>
 </local:Popup>

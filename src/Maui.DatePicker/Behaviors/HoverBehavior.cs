@@ -1,4 +1,5 @@
 ﻿using Maui.DatePicker.Animations;
+using Maui.DatePicker.Extensions;
 using Microsoft.Maui.Graphics.Platform;
 using System.ComponentModel;
 
@@ -77,9 +78,9 @@ namespace Maui.DatePicker.Behaviors
             var lastBgColor = _isHovered ? _hoveredBackgroundColor : _originBackgroundColor;
 
             var cancelled = await element.ColorTo(lastBgColor,
-                                               new Color(lastBgColor.Red - .04f, lastBgColor.Green - .04f, lastBgColor.Blue - .04f),
+                                               lastBgColor.Darker(),
                                                v => element.BackgroundColor = v,
-                                               200);
+                                               100);
             if (!cancelled)
             {
                 await element.ColorTo(element.BackgroundColor,
@@ -101,7 +102,7 @@ namespace Maui.DatePicker.Behaviors
             _bgChanging = true;
             _isHovered = true;
 
-            element.BackgroundColor = new Color(element.BackgroundColor.Red - .04f, element.BackgroundColor.Green - .04f, element.BackgroundColor.Blue - .04f);
+            element.BackgroundColor = element.BackgroundColor.Darker();
 
             _hoveredBackgroundColor = element.BackgroundColor;
             _bgChanging = false;

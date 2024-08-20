@@ -32,6 +32,9 @@ public partial class DatePickerDialog : Popup
         Config.Language = newValue;
         var flowDirection = newValue.GetDirection();
 
+        okButton.Text = Constants.Resources.GetStringValue(Constants.Resources.Ok);
+        cancelButton.Text = Constants.Resources.GetStringValue(Constants.Resources.Cancel);
+
         _calendar = new Calendar.Calendar();
         _calendar.ActiveMonthChanged += MonthChanged;
         Content = _calendar;

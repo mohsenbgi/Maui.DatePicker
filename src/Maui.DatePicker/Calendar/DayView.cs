@@ -1,5 +1,6 @@
 ﻿using Maui.DatePicker.Interfaces;
 using Maui.DatePicker.Constants;
+using Maui.DatePicker.Extensions;
 
 namespace Maui.DatePicker.Calendar;
 
@@ -108,7 +109,7 @@ public class DayView : Border, IDayView
         if (element.BackgroundColor == null || element.BackgroundColor == Colors.Transparent) element.BackgroundColor = Colors.White;
 
         _originBackgroundColor = element.BackgroundColor;
-        element.BackgroundColor = new Color(element.BackgroundColor.Red - .04f, element.BackgroundColor.Green - .04f, element.BackgroundColor.Blue - .04f);
+        element.BackgroundColor = element.BackgroundColor.Darker();
     }
 
     void PointerExited(object? sender, PointerEventArgs eventArgs)
