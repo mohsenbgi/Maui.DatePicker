@@ -1,6 +1,8 @@
 ﻿using Maui.DatePicker.Interfaces;
 using Maui.DatePicker.Constants;
 using Maui.DatePicker.Extensions;
+using Maui.DatePicker.Helpers;
+using Microsoft.Maui.Controls;
 
 namespace Maui.DatePicker.Calendar;
 
@@ -106,10 +108,20 @@ public class DayView : Border, IDayView
 
         if (element.IsSelected || element.IsDisable) return;
 
-        if (element.BackgroundColor == null || element.BackgroundColor == Colors.Transparent) element.BackgroundColor = Colors.White;
+        var defaultBackgroundColor = Application.Current?.RequestedTheme == AppTheme.Light
+            ? Constants.Calendar.CalendarGenericLightBackgroundColor : Constants.Calendar.CalendarGenericDarkBackgroundColor;
+
+        if (element.BackgroundColor == null || element.BackgroundColor == Colors.Transparent) element.BackgroundColor = defaultBackgroundColor;
 
         _originBackgroundColor = element.BackgroundColor;
-        element.BackgroundColor = element.BackgroundColor.Darker();
+        if (Application.Current?.RequestedTheme == AppTheme.Light)
+        {
+            element.BackgroundColor = element.BackgroundColor.Darker();
+        }
+        else
+        {
+            element.BackgroundColor = element.BackgroundColor.Lighter();
+        }
     }
 
     void PointerExited(object? sender, PointerEventArgs eventArgs)
@@ -139,28 +151,59 @@ public class DayView : Border, IDayView
 
 public class DayViewIsSelectedBehavior : Behavior<DayView>
 {
+    DayView _dayView;
     protected override void OnAttachedTo(DayView bindable)
     {
+        _dayView = bindable;
         bindable.IsSelectedChanged += IsSelectedChanged;
+        
+        if (Application.Current != null)
+            Application.Current.RequestedThemeChanged += OnThemeChanged;
+
         base.OnAttachedTo(bindable);
     }
 
     protected override void OnDetachingFrom(DayView bindable)
     {
         bindable.IsSelectedChanged -= IsSelectedChanged;
+
+        if (Application.Current != null)
+            Application.Current.RequestedThemeChanged -= OnThemeChanged;
+        
+        _dayView = null;
+
         base.OnDetachingFrom(bindable);
+    }
+
+    void OnThemeChanged(object? sender, System.EventArgs eventArgs)
+    {
+        IsSelectedChanged(_dayView, System.EventArgs.Empty);
     }
 
     void IsSelectedChanged(object? sender, System.EventArgs eventArgs)
     {
         var view = (DayView)sender;
+
+        var bgColor = Application.Current?.RequestedTheme == AppTheme.Light 
+            ? Constants.Calendar.CalendarGenericLightBackgroundColor 
+            : Constants.Calendar.CalendarGenericDarkBackgroundColor;
+
+        view.BackgroundColor = bgColor;
+
         if (view.IsSelected)
         {
-            view.BackgroundColor = Color.FromArgb("E6E6E6");
+            if (Application.Current?.RequestedTheme == AppTheme.Light)
+            {
+                view.BackgroundColor = view.BackgroundColor.Darker().Darker();
+            }
+            else
+            {
+                view.BackgroundColor = view.BackgroundColor.Lighter().Lighter();
+            }
         }
         else
         {
-            view.BackgroundColor = Colors.White;
+            view.BackgroundColor = bgColor;
         }
     }
 }

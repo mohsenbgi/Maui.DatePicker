@@ -6,7 +6,7 @@ using System.ComponentModel;
 
 namespace Maui.DatePicker;
 [ContentProperty(nameof(Content))]
-public partial class Popup : ContentView
+public partial class Popup : ContentView, IDisposable
 {
     public static new readonly BindableProperty ContentProperty = BindableProperty.Create(nameof(Content), typeof(View), typeof(Popup),
         propertyChanged: (bindable, oldValue, newValue) => ((Popup)bindable).OnContentChanged((View)oldValue, (View)newValue));
@@ -116,7 +116,23 @@ public partial class Popup : ContentView
 
         PropertyChanged += OnPropertyChanged;
 
+        if (Application.Current != null)
+            Application.Current.RequestedThemeChanged += OnThemeChanged;
+
         InitGestures();
+    }
+
+    public void Dispose()
+    {
+        if (Application.Current != null)
+            Application.Current.RequestedThemeChanged -= OnThemeChanged;
+    }
+
+    void OnThemeChanged(object? sender, System.EventArgs eventArgs)
+    {
+        _contentPresenter.BackgroundColor = Application.Current?.RequestedTheme == AppTheme.Light
+                ? Constants.Calendar.CalendarGenericLightBackgroundColor
+                : Constants.Calendar.CalendarGenericDarkBackgroundColor;
     }
 
     private void InitGestures()

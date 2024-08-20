@@ -7,10 +7,14 @@
              xmlns:controls="clr-namespace:Maui.DatePicker.Controls"
              xmlns:calendar="clr-namespace:Maui.DatePicker.Calendar"
              xmlns:behavior="clr-namespace:Maui.DatePicker.Behaviors"
-             xmlns:convertors="clr-namespace:Maui.DatePicker.Convertors"
              BindingContext="{x:Reference Self}"
              CloseByTappingOutside="True"
-             FooterHasDivider="True">
+             FooterHasDivider="True"
+             BackgroundColor="{AppThemeBinding Light=White, Dark=#1C1C1C}">
+    <local:Popup.Resources>
+        <Color x:Key="CalendarGenericLightBackgroundColor">White</Color>
+        <Color x:Key="CalendarGenericDarkBackgroundColor">#1C1C1C</Color>
+    </local:Popup.Resources>
     <local:Popup.Header>
         <Grid ColumnDefinitions="*,Auto" VerticalOptions="Center" HeightRequest="35" FlowDirection="LeftToRight">
             <Border StrokeThickness="0" Padding="5">
@@ -29,19 +33,19 @@
                 </HorizontalStackLayout>
             </Border>
             <HorizontalStackLayout Spacing="5" Grid.Column="2" VerticalOptions="Center" x:Name="navBox">
-                <controls:ArrowButton Clicked="GoToPrevMonth" FlowDirection="RightToLeft" x:Name="leftMonth"/>
-                <controls:ArrowButton Clicked="GoToNextMonth" FlowDirection="LeftToRight" x:Name="rightMonth"/>
+                <controls:ArrowButton BackgroundColor="{AppThemeBinding Light={StaticResource CalendarGenericLightBackgroundColor}, Dark={StaticResource CalendarGenericDarkBackgroundColor}}" TintColor="{AppThemeBinding Light=Black, Dark=White}" Clicked="GoToPrevMonth" FlowDirection="RightToLeft" x:Name="leftMonth"/>
+                <controls:ArrowButton BackgroundColor="{AppThemeBinding Light={StaticResource CalendarGenericLightBackgroundColor}, Dark={StaticResource CalendarGenericDarkBackgroundColor}}" TintColor="{AppThemeBinding Light=Black, Dark=White}" Clicked="GoToNextMonth" FlowDirection="LeftToRight" x:Name="rightMonth"/>
             </HorizontalStackLayout>
         </Grid>
     </local:Popup.Header>
     <local:Popup.Footer>
-        <HorizontalStackLayout Spacing="5" Margin="0,5,0,0" HorizontalOptions="End">
-            <Button BackgroundColor="White" TextColor="Black" FontSize="13" Text="Cancel" x:Name="cancelButton">
+        <HorizontalStackLayout Spacing="5" Margin="0,5,0,0" HorizontalOptions="End" >
+            <Button BackgroundColor="{AppThemeBinding Light={StaticResource CalendarGenericLightBackgroundColor}, Dark={StaticResource CalendarGenericDarkBackgroundColor}}" TextColor="{AppThemeBinding Light=Black, Dark=White}" FontSize="13" Text="Cancel" x:Name="cancelButton">
                 <Button.Behaviors>
                     <behavior:HoverBehavior />
                 </Button.Behaviors>
             </Button>
-            <Button BackgroundColor="White" TextColor="Black" FontSize="13" Text="Ok" x:Name="okButton">
+            <Button BackgroundColor="{AppThemeBinding Light={StaticResource CalendarGenericLightBackgroundColor}, Dark={StaticResource CalendarGenericDarkBackgroundColor}}" TextColor="{AppThemeBinding Light=Black, Dark=White}" FontSize="13" Text="Ok" x:Name="okButton">
                 <Button.Behaviors>
                     <behavior:HoverBehavior />
                 </Button.Behaviors>

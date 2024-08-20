@@ -2,7 +2,7 @@
 {
     public static class ColorExtensions
     {
-        const float LighterFactor = 1.1f;
+        const float LighterFactor = 1.5f;
         const float DarkerFactor = 0.95f;
 
         public static Color Lighter(this Color color)

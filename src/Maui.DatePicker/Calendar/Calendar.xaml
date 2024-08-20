@@ -10,17 +10,16 @@
         <FlowDirection x:Key="GlobalFlowDirection">LeftToRight</FlowDirection>
         <x:Double x:Key="WeeksHeight">40</x:Double>
         <x:Double x:Key="MonthHeight">240</x:Double>
-        <Color x:Key="CalendarGenericLightBackgroundColor">Transparent</Color>
-
-        <Style TargetType="DatePicker" >
-            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource CalendarGenericLightBackgroundColor}}"/>
-        </Style>
+        <Color x:Key="CalendarGenericLightBackgroundColor">White</Color>
+        <Color x:Key="CalendarGenericDarkBackgroundColor">#1C1C1C</Color>
+        <Color x:Key="DarkPrimary">#faa95c</Color>
+        <Color x:Key="LightPrimary">#e67207</Color>
 
         <Style TargetType="controls:MonthView">
             <Setter Property="HeightRequest" Value="{StaticResource MonthHeight}"/>
             <Setter Property="FlowDirection" Value="{DynamicResource GlobalFlowDirection}"/>
             <Setter Property="IsClippedToBounds" Value="True" />
-            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource CalendarGenericLightBackgroundColor}}"/>
+            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource CalendarGenericLightBackgroundColor}, Dark={StaticResource CalendarGenericDarkBackgroundColor}}"/>
             <Setter Property="VerticalOptions" Value="Start" />
         </Style>
 
@@ -28,18 +27,18 @@
             <Setter Property="HeightRequest" Value="{StaticResource MonthHeight}"/>
             <Setter Property="IsClippedToBounds" Value="True"/>
 
-            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource CalendarGenericLightBackgroundColor}}"/>
+            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource CalendarGenericLightBackgroundColor}, Dark={StaticResource CalendarGenericDarkBackgroundColor}}"/>
         </Style>
 
         <Style TargetType="HorizontalStackLayout" x:Key="WeekDays">
-            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource CalendarGenericLightBackgroundColor}}"/>
+            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource CalendarGenericLightBackgroundColor}, Dark={StaticResource CalendarGenericDarkBackgroundColor}}"/>
             <Setter Property="FlowDirection" Value="{DynamicResource GlobalFlowDirection}" />
             <Setter Property="HeightRequest" Value="25"/>
             <Setter Property="Spacing" Value="5"/>
         </Style>
 
         <Style TargetType="Label" x:Key="WeekDay">
-            <Setter Property="TextColor" Value="{StaticResource Gray600}" />
+            <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Gray600}, Dark=White}" />
             <Setter Property="FontSize" Value="12" />
             <Setter Property="WidthRequest" Value="35"/>
             <Setter Property="HeightRequest" Value="25"/>
@@ -65,18 +64,19 @@
             <Setter Property="HorizontalOptions" Value="Center"/>
             <Setter Property="VerticalOptions" Value="Center"/>
             <Setter Property="Padding" Value="5"/>
+            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource CalendarGenericLightBackgroundColor},Dark={StaticResource CalendarGenericDarkBackgroundColor}}" />
         </Style>
 
         <Style TargetType="controls:DayTitleView">
             <Setter Property="HorizontalTextAlignment" Value="Center"/>
             <Setter Property="VerticalTextAlignment" Value="Center"/>
-            <Setter Property="TextColor" Value="Black"/>
+            <Setter Property="TextColor" Value="{AppThemeBinding Light=Black, Dark=White}"/>
             <Setter Property="WidthRequest" Value="25"/>
             <Setter Property="HeightRequest" Value="25"/>
             <Setter Property="FontSize" Value="13"/>
             <Style.Triggers>
                 <DataTrigger TargetType="controls:DayTitleView" Binding="{Binding Source={RelativeSource AncestorType={x:Type controls:DayView}}, Path=IsToday}" Value="True">
-                    <Setter Property="TextColor" Value="{StaticResource Primary}"/>
+                    <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource LightPrimary}, Dark={StaticResource DarkPrimary}}"/>
                 </DataTrigger>
                 <DataTrigger TargetType="controls:DayTitleView" Binding="{Binding Source={RelativeSource AncestorType={x:Type controls:DayView}}, Path=IsDisable}" Value="True">
                     <Setter Property="TextColor" Value="Transparent"/>

@@ -1,5 +1,6 @@
 ﻿using Maui.DatePicker.Animations;
 using Maui.DatePicker.Extensions;
+using Maui.DatePicker.Helpers;
 using Microsoft.Maui.Graphics.Platform;
 using System.ComponentModel;
 
@@ -14,6 +15,7 @@ namespace Maui.DatePicker.Behaviors
         bool _bgChanging;
         bool _tapping;
         bool _isHovered;
+        VisualElement _element;
 
 
         public HoverBehavior()
@@ -28,6 +30,7 @@ namespace Maui.DatePicker.Behaviors
 
         protected override void OnAttachedTo(VisualElement bindable)
         {
+            _element = bindable;
             if (bindable is IGestureRecognizers gesture)
             {
                 gesture.GestureRecognizers.Add(_pointerGestureRecognizer);
@@ -37,17 +40,32 @@ namespace Maui.DatePicker.Behaviors
             bindable.PropertyChanged += OnPropertyChanged;
             bindable.Unloaded += (s, e) => OnPointerExited(bindable, new PointerEventArgs());
 
+            if(Application.Current != null)
+                Application.Current.RequestedThemeChanged += OnThemeChanged;
+
             base.OnAttachedTo(bindable);
         }
 
         protected override void OnDetachingFrom(VisualElement bindable)
         {
+            if (Application.Current != null)
+                Application.Current.RequestedThemeChanged -= OnThemeChanged;
+
             if (bindable is IGestureRecognizers gestures)
             {
                 gestures.GestureRecognizers.Remove(_pointerGestureRecognizer);
                 gestures.GestureRecognizers.Remove(_tapGestureRecognizer);
             }
+
+            _element = null;
             base.OnDetachingFrom(bindable);
+        }
+
+        void OnThemeChanged(object? sender, System.EventArgs eventArgs)
+        {
+            _element.BackgroundColor = Application.Current?.RequestedTheme == AppTheme.Light
+                    ? Constants.Calendar.CalendarGenericLightBackgroundColor
+                    : Constants.Calendar.CalendarGenericDarkBackgroundColor;
         }
 
         private void OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -62,7 +80,11 @@ namespace Maui.DatePicker.Behaviors
         {
             var element = (VisualElement)sender;
 
-            if (element.BackgroundColor == null || element.BackgroundColor == Colors.Transparent) element.BackgroundColor = Colors.White;
+            var bgColor = Application.Current?.RequestedTheme == AppTheme.Light
+                    ? Constants.Calendar.CalendarGenericLightBackgroundColor
+                    : Constants.Calendar.CalendarGenericDarkBackgroundColor;
+
+            if (element.BackgroundColor == null || element.BackgroundColor == Colors.Transparent) element.BackgroundColor = bgColor;
 
             lock (sender)
             {
@@ -77,8 +99,10 @@ namespace Maui.DatePicker.Behaviors
 
             var lastBgColor = _isHovered ? _hoveredBackgroundColor : _originBackgroundColor;
 
+            var toColor = Application.Current?.RequestedTheme == AppTheme.Light ? lastBgColor.Darker() : lastBgColor.Lighter();
+
             var cancelled = await element.ColorTo(lastBgColor,
-                                               lastBgColor.Darker(),
+                                               toColor,
                                                v => element.BackgroundColor = v,
                                                100);
             if (!cancelled)
@@ -97,12 +121,18 @@ namespace Maui.DatePicker.Behaviors
         {
             var element = (VisualElement)sender;
 
-            if (element.BackgroundColor == null || element.BackgroundColor == Colors.Transparent) element.BackgroundColor = Colors.White;
+            var bgColor = Application.Current?.RequestedTheme == AppTheme.Light
+                    ? Constants.Calendar.CalendarGenericLightBackgroundColor
+                    : Constants.Calendar.CalendarGenericDarkBackgroundColor;
+
+            if (element.BackgroundColor == null || element.BackgroundColor == Colors.Transparent) element.BackgroundColor = bgColor;
 
             _bgChanging = true;
             _isHovered = true;
 
-            element.BackgroundColor = element.BackgroundColor.Darker();
+            var toColor = Application.Current?.RequestedTheme == AppTheme.Light ? element.BackgroundColor.Darker() : element.BackgroundColor.Lighter();
+
+            element.BackgroundColor = toColor;
 
             _hoveredBackgroundColor = element.BackgroundColor;
             _bgChanging = false;
