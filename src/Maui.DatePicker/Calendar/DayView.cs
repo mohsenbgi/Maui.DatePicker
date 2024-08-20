@@ -6,7 +6,7 @@ using Microsoft.Maui.Controls;
 
 namespace Maui.DatePicker.Calendar;
 
-public class DayView : Border, IDayView
+public class DayView : Border, IDayView, IDisposable
 {
     #region Fields
 
@@ -86,6 +86,9 @@ public class DayView : Border, IDayView
         pointer.PointerExited += PointerExited;
         GestureRecognizers.Add(pointer);
 
+        if(Application.Current != null)
+            Application.Current.RequestedThemeChanged += OnThemeChanged;
+
         Behaviors.Add(new DayViewIsSelectedBehavior());
 
         _title = new DayTitleView();
@@ -96,12 +99,23 @@ public class DayView : Border, IDayView
 
     #region Methods
 
+    public void Dispose()
+    {
+        if (Application.Current != null)
+            Application.Current.RequestedThemeChanged -= OnThemeChanged;
+    }
+
     protected virtual void OnTapped(object? sender, TappedEventArgs e)
     {
         if (sender is DayView day)
         {
             Tapped?.Invoke(sender, e);
         }
+    }
+
+    void OnThemeChanged(object? sender, System.EventArgs eventArgs)
+    {
+        GenerateTextColor();
     }
 
     private void GenerateTextColor()
