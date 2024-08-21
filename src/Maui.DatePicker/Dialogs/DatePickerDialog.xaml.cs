@@ -77,7 +77,7 @@ public partial class DatePickerDialog : Popup
     {
         var currentDate = _calendar.ActiveMonth.SelectedDate;
         var cal = Config.Language.GetCalendar();
-        var expectedDate = new DateTime(int.Parse(currentYear.Text), selectedMonth, cal.GetDayOfMonth(currentDate), cal);
+        var expectedDate = new DateTime(int.Parse(currentYear.Text), selectedMonth, 1, cal);
         _calendar.GoToDate(expectedDate);
         await NavigateBack();
         currentMonth.IsVisible = true;
