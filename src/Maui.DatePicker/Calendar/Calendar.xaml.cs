@@ -15,7 +15,6 @@ public partial class Calendar : Grid
     bool _isRenderingMonths;
     Task _renderingMonthsTask;
     readonly PanGestureRecognizer _panGestureRecognizer;
-    readonly Dictionary<int, IMonthView> _monthViews;
     bool _isHorizontalPan;
     bool _isVerticalPan;
     double _appliedTotalXDiff;
@@ -87,22 +86,15 @@ public partial class Calendar : Grid
             });
         }
 
-        _monthViews = new Dictionary<int, IMonthView>();
 
         _panGestureRecognizer = new PanGestureRecognizer();
         _panGestureRecognizer.PanUpdated += OnPanUpdated;
         GestureRecognizers.Add(_panGestureRecognizer);
 
         _todayMonthView = MonthFactory.CreateMonthData(0, DateTime.Now.Date);
-
         _activeMonth = MonthFactory.CreateMonthView(0, DateTime.Now.Date);
-        _monthViews[_activeMonth.ViewId] = MonthFactory.CreateMonthData(_activeMonth.ViewId, _activeMonth.SelectedDate);
-
         _prevMonth = MonthFactory.CreateMonthView(-1, DateTime.Now.Date.GetPrevMonthFirstDay());
-        _monthViews[_prevMonth.ViewId] = MonthFactory.CreateMonthData(_prevMonth.ViewId, _prevMonth.SelectedDate);
-
         _nextMonth = MonthFactory.CreateMonthView(1, DateTime.Now.Date.GetNextMonthFirstDay());
-        _monthViews[_nextMonth.ViewId] = MonthFactory.CreateMonthData(_nextMonth.ViewId, _nextMonth.SelectedDate);
     }
 
     #endregion
@@ -115,17 +107,10 @@ public partial class Calendar : Grid
         Resources["GlobalFlowDirection"] = flowDirection;
     }
 
-    public IMonthView? GetMonthView(int viewId)
-    {
-        _monthViews.TryGetValue(viewId, out IMonthView? monthView);
-        return monthView;
-    }
-
     private void AddMonthView(MonthView monthView)
     {
         monthContainerBox.Add(monthView);
 
-        //monthView.DayTapped += OnDayTapped;
         monthView.GestureRecognizers.Add(_panGestureRecognizer);
         foreach (var week in monthView.Weeks)
         {
@@ -136,11 +121,6 @@ public partial class Calendar : Grid
         {
             day.GestureRecognizers.Add(_panGestureRecognizer);
         }
-    }
-
-    public bool ExistsMonthView(IMonthView monthView)
-    {
-        return _monthViews.ContainsKey(monthView.ViewId);
     }
 
     public async Task GoToRightMonth(DateTime? selectedDate = null)
@@ -181,12 +161,7 @@ public partial class Calendar : Grid
         if (differentTime.Ticks < 0) totalMonths = -totalMonths;
 
         var expectedViewId = ActiveMonth.ViewId + totalMonths;
-        var expectedMonthData = GetMonthView(expectedViewId);
-        if(expectedMonthData is null)
-        {
-            expectedMonthData = MonthFactory.CreateMonthData(expectedViewId, date);
-            _monthViews[expectedMonthData.ViewId] = expectedMonthData;
-        }
+        var expectedMonthData = MonthFactory.CreateMonthData(expectedViewId, date);
 
         ActiveMonth = expectedMonthData;
         ActiveMonth = _activeMonth;
@@ -382,65 +357,10 @@ public partial class Calendar : Grid
         return arrangedSize;
     }
 
-    private Task RenderPrevAndNextMonths()
-    {
-        if (_isRenderingMonths) return _renderingMonthsTask;
-
-        _isRenderingMonths = true;
-
-        _renderingMonthsTask = Task.Run(render).ContinueWith((task) => { _isRenderingMonths = false; });
-        return _renderingMonthsTask;
-
-        void render()
-        {
-            var currentMonth = ActiveMonth;
-
-            for (int i = 0; i < Maui.DatePicker.Constants.Calendar.GeneratedInVisibleMonthsCount; i++)
-            {
-                var nextMonthInList = GetMonthView(currentMonth.ViewId + 1);
-                if (nextMonthInList is not null)
-                {
-                    currentMonth = nextMonthInList;
-                    continue;
-                }
-
-                var nextMonth = MonthFactory.CreateMonthData(currentMonth.ViewId + 1, currentMonth.SelectedDate.GetNextMonthFirstDay());
-
-                _monthViews[nextMonth.ViewId] = nextMonth;
-
-                currentMonth = nextMonth;
-            }
-
-            currentMonth = ActiveMonth;
-
-            for (int i = 0; i < Maui.DatePicker.Constants.Calendar.GeneratedInVisibleMonthsCount; i++)
-            {
-                var prevMonthInList = GetMonthView(currentMonth.ViewId - 1);
-                if (prevMonthInList is not null)
-                {
-                    currentMonth = prevMonthInList;
-                    continue;
-                }
-
-                var prevMonth = MonthFactory.CreateMonthData(currentMonth.ViewId - 1, currentMonth.SelectedDate.GetPrevMonthFirstDay());
-
-                _monthViews[prevMonth.ViewId] = prevMonth;
-
-                currentMonth = prevMonth;
-            }
-        }
-    }
-
-    protected virtual async void OnActiveMonthChanged(IMonthView? deactivatedMonth, IMonthView? activatedMonth)
+    protected virtual void OnActiveMonthChanged(IMonthView? deactivatedMonth, IMonthView? activatedMonth)
     {
         if (deactivatedMonth is MonthView deactivatedMonthView && activatedMonth is not MonthData)
         {
-            var deactivatedMonthData = GetMonthView(deactivatedMonthView.ViewId);
-            if (deactivatedMonthData is not null)
-            {
-                deactivatedMonthData.Replace(deactivatedMonthView);
-            }
-
             if (deactivatedMonthView.ViewId < activatedMonth?.ViewId)
             {
                 _nextMonth = _prevMonth;
@@ -467,21 +387,14 @@ public partial class Calendar : Grid
                 
             }
 
-            await ReplaceMonthViewByNewViewId(_prevMonth, activatedMonth.ViewId - 1);
-            await ReplaceMonthViewByNewViewId(_nextMonth, activatedMonth.ViewId + 1);
-
-            if (!ExistsMonthView(activatedMonth))
-            {
-                _monthViews[activatedMonth.ViewId] = activatedMonth;
-            }
-
-            RenderPrevAndNextMonths();
+            ReplaceMonthViewByNewViewId(_prevMonth, activatedMonth.ViewId - 1);
+            ReplaceMonthViewByNewViewId(_nextMonth, activatedMonth.ViewId + 1);
         }
 
         ActiveMonthChanged?.Invoke(this, new MonthChangedEventArgs(deactivatedMonth, activatedMonth));
     }
 
-    private async ValueTask ReplaceMonthViewByNewViewId(MonthView monthView, int viewId)
+    private void ReplaceMonthViewByNewViewId(MonthView monthView, int viewId)
     {
         var toApplyX = 0d;
 
@@ -498,11 +411,15 @@ public partial class Calendar : Grid
 
         if (monthView.ViewId == viewId) return;
 
-        var monthData = GetMonthView(viewId);
-        if (monthData is null)
+        IMonthView monthData;
+
+        if(viewId > _activeMonth.ViewId)
         {
-            await RenderPrevAndNextMonths();
-            monthData = GetMonthView(viewId);
+            monthData = MonthFactory.CreateMonthData(viewId, _activeMonth.SelectedDate.GetNextMonthFirstDay());
+        }
+        else
+        {
+            monthData = MonthFactory.CreateMonthData(viewId, _activeMonth.SelectedDate.GetPrevMonthFirstDay());
         }
 
         monthView.Replace(monthData);
