@@ -4,8 +4,7 @@
              x:Class="SampleApp.CalendarPage"
              xmlns:dp="clr-namespace:Maui.DatePicker.Dialogs;assembly=Maui.DatePicker">
 
-    <Grid>
-        <dp:DatePickerDialog x:Name="dialog" Language="Persian"/>
+    <Grid x:Name="grid">
         <VerticalStackLayout Spacing="10">
             <Button Text="Open calnedar"  x:Name="popupOpener" WidthRequest="200"/>
             <Entry x:Name="datePicker" Text="0000/00/00" WidthRequest="200"/>

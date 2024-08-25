@@ -27,6 +27,25 @@ public partial class DatePickerDialog : Popup
     public DatePickerDialog()
     {
         InitializeComponent();
+
+#if ANDROID
+
+        okButton.Clicked -= OkButtonClicked;
+        var okButtonTap = new TapGestureRecognizer();
+        okButtonTap.Tapped += OkButtonClicked;
+        okButton.GestureRecognizers.Add(okButtonTap);
+
+        cancelButton.Clicked -= CancelButtonClicked;
+        var cancelButtonTap = new TapGestureRecognizer();
+        cancelButtonTap.Tapped += CancelButtonClicked;
+        cancelButton.GestureRecognizers.Add(cancelButtonTap);
+
+        todayButton.Clicked -= TodayButtonClicked;
+        var todayButtonTap = new TapGestureRecognizer();
+        todayButtonTap.Tapped += TodayButtonClicked;
+        todayButton.GestureRecognizers.Add(todayButtonTap);
+
+#endif
     }
 
     public void OnLanguageChanged(Language oldValue, Language newValue)
