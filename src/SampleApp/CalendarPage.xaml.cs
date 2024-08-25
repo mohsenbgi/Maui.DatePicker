@@ -1,5 +1,4 @@
-﻿using Bumptech.Glide.Load.Resource.Gif;
-using Maui.DatePicker.Dialogs;
+﻿using Maui.DatePicker.Dialogs;
 using Maui.DatePicker.Enums;
 using System.Globalization;
 
