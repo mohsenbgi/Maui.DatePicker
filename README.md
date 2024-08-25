@@ -26,3 +26,7 @@ Windows
 Mac
 
 ![image](https://github.com/user-attachments/assets/e50a4896-89d8-4eac-8aa3-52f1218d2933)
+
+Dark mode and gregorian calendar:
+
+![image](https://github.com/user-attachments/assets/e3a19882-4010-43dd-9978-335aed72355d)
