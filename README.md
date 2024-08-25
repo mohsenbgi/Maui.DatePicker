@@ -1,3 +1,16 @@
+Custom datepicker for maui
+
+supported features:
+
+Gregorian calendar
+
+Persian calendar
+
+Dark mode
+
+light mode
+
+
 Android
 
 ![image](https://github.com/user-attachments/assets/b4e1db99-291e-4759-ba0b-94374f3b7f99)
